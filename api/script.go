@@ -5,20 +5,18 @@ import (
 	"github.com/mahdi-cpp/api-go-javascript-parser/repository"
 )
 
-func StarScriptParse() {
-	repository.ScriptParse()
-}
-
 func AddJavascriptRoutes(rg *gin.RouterGroup) {
 
-	javascript := rg.Group("/javascript")
+	javascript := rg.Group("/script")
 
-	javascript.GET("/images", func(context *gin.Context) {
-
-		podcastDTO := repository.GetImages()
-
-		context.JSON(210, gin.H{
-			"javascriptDTO": podcastDTO,
-		})
+	javascript.GET("/feed", func(context *gin.Context) {
+		repository.StartScriptParse()
+		context.JSON(210,
+			gin.H{
+				"textViews":     repository.GetTextViews(),
+				"images":        repository.GetImages(),
+				"circleButtons": repository.GetCircleButtons(),
+				"switchButtons": repository.GetSwitchButtons(),
+			})
 	})
 }

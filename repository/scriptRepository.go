@@ -5,23 +5,47 @@ import (
 	"github.com/mahdi-cpp/api-go-javascript-parser/model"
 	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 )
 
 var images []model.Image
+var textViews []model.TextView
+var circleButtons []model.CircleButton
+var switchButtons []model.SwitchButton
 
+//-------------------------------------------------------------------
+
+func GetTextViews() []model.TextView {
+	return textViews
+}
 func GetImages() []model.Image {
-	images := ScriptParse()
 	return images
 }
+func GetCircleButtons() []model.CircleButton {
+	return circleButtons
+}
+func GetSwitchButtons() []model.SwitchButton {
+	return switchButtons
+}
 
-func ScriptParse() []model.Image {
+//-------------------------------------------------------------------
+
+func StartScriptParse() {
+	images = []model.Image{} //set to Empty Array
+	textViews = []model.TextView{}
+	circleButtons = []model.CircleButton{}
+	switchButtons = []model.SwitchButton{}
+	scriptParse()
+}
+
+func scriptParse() {
 
 	jsFile, err := utils.ReadFile("web/FloatView.js")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
-		return nil
+		return
 	} else {
 		fmt.Println("ok reading file")
 	}
@@ -31,14 +55,12 @@ func ScriptParse() []model.Image {
 	if found {
 		FloatView, _, hasFloatView := strings.Cut(after, " </FloatView>")
 		if hasFloatView {
-			fmt.Println(FloatView)
+			//fmt.Println(FloatView)
 			FindView(FloatView)
 		} else {
 			fmt.Println("FloatView Not Exist")
 		}
 	}
-
-	return images
 }
 
 func FindView(FloatView string) {
@@ -53,7 +75,7 @@ func FindView(FloatView string) {
 			elements := strings.Split(View, "<")
 			for _, element := range elements {
 				if hasElement(element) {
-					//fmt.Println(element)
+					fmt.Println(element)
 					ViewElementParse(element)
 					//fmt.Println("-------------------------------")
 				}
@@ -64,60 +86,203 @@ func FindView(FloatView string) {
 	}
 }
 
-func ViewElementParse(element string) {
+type ViewParse struct {
+	ViewName   string
+	Attributes []string
+	Values     []string
+}
 
-	//attributes := strings.Split(element, " ")
+func ViewElementParse(view string) {
 
-	//str := "title={'Thetitle and new helium handler are required. It is recommended to'}"
-	attributes := splitWithStartAlphabetWordExceptCurlyBraces(element)
+	attributes := splitWithStartAlphabetWordExceptCurlyBraces(view)
+	//fmt.Println(view)
+	//fmt.Println(attributes)
 
-	var attrs []string
-	var values []string
-
+	var viewParse ViewParse
+	var index = 0
 	for _, attribute := range attributes {
 
 		if strings.Contains(attribute, "{") {
-			//attribute = strings.Replace(attribute, "{", "", -1)
-			//attribute = strings.Replace(attribute, "}", "", -1)
-			values = append(values, attribute)
+			attribute = strings.Replace(attribute, "{", "", -1)
+			attribute = strings.Replace(attribute, "}", "", -1)
+			viewParse.Values = append(viewParse.Values, attribute)
 		} else {
-			attrs = append(attrs, attribute)
+			if index == 0 {
+				viewParse.ViewName = attribute
+			} else {
+				attribute = strings.Replace(attribute, " ", "", 2)
+				viewParse.Attributes = append(viewParse.Attributes, attribute)
+			}
 		}
+		index += 1
 	}
 
-	fmt.Println("Element:", attrs[0])
+	fmt.Println(viewParse.ViewName)
+	//fmt.Println(viewParse.Attributes)
+	//fmt.Println(viewParse.Values)
 
-	if strings.Contains(attrs[0], "Image") {
-		//var img javascript.Image
-		//img.Source = ""
-		//src, exists :=  AttrFloat("width")
-		//if exists {
-		//	//img.Width = src
-		//}
-		//images = append(images, img)
+	switch viewParse.ViewName {
+	case "TextView":
+		TextParser(viewParse)
+		break
+	case "Image":
+		ImageParser(viewParse)
+		break
+	case "CircleButton":
+		CircleButtonParser(viewParse)
+		break
+	case "SwitchButton":
+		SwitchButtonParser(viewParse)
+		break
 	}
-
-	attrs = removeFirstElement(attrs)
-	fmt.Println("Attribute:", attrs)
-	fmt.Println("Values:", values)
 
 	fmt.Println("--------------------------------------------------")
 
 }
 
-//type ScriptParser struct {
-//	images          []model.Image
-//	children        map[string]model.Image
-//	register        chan *Client
-//	unregister      chan *Client
-//	rooms           map[*Room]bool
-//	imageRepository model.ImageRepository
-//}
+func TextParser(view ViewParse) {
 
-//func AttrFloat(attrName string) (val string, exists bool) {
-//
-//	return nil, nil
-//}
+	var textView model.TextView
+	var index = 0
+	for _, attr := range view.Attributes {
+		//fmt.Println("'" + attr + "'")
+		switch attr {
+		case "dx":
+			textView.Dx = utils.GetFloat(view.Values[index])
+			break
+		case "dy":
+			textView.Dy = utils.GetFloat(view.Values[index])
+			break
+		case "width":
+			textView.Width = utils.GetFloat(view.Values[index])
+			break
+		case "height":
+			textView.Height = utils.GetFloat(view.Values[index])
+			break
+		case "text":
+			var t = view.Values[index]
+			t = strings.Replace(t, "'", "", 2)
+			textView.Text = t
+			break
+		case "textColor":
+			textView.TextColor = utils.GetColor(view.Values[index])
+			break
+		case "textSize":
+			textView.TextSize = utils.GetFloat(view.Values[index])
+			break
+		case "align":
+			var t = view.Values[index]
+			t = strings.Replace(t, "'", "", 2)
+			textView.Align = t
+			break
+		}
+		index++
+	}
+
+	textViews = append(textViews, textView)
+}
+
+func ImageParser(view ViewParse) {
+	var image model.Image
+	var index = 0
+	for _, attr := range view.Attributes {
+		switch attr {
+		case "dx":
+			image.Dx = utils.GetFloat(view.Values[index])
+			break
+		case "dy":
+			image.Dy = utils.GetFloat(view.Values[index])
+			break
+		case "width":
+			image.Width = utils.GetFloat(view.Values[index])
+			break
+		case "source":
+			var t = view.Values[index]
+			t = strings.Replace(t, "'", "", 2)
+			image.Source = t
+			break
+		case "round":
+			image.Round = utils.GetFloat(view.Values[index])
+			break
+		case "height":
+			image.Height = utils.GetFloat(view.Values[index])
+			break
+		}
+		index++
+	}
+
+	fmt.Println(image)
+	images = append(images, image)
+}
+
+func SwitchButtonParser(view ViewParse) {
+	var switchButton model.SwitchButton
+	var index = 0
+	for _, attr := range view.Attributes {
+		//fmt.Println("'" + attr + "'")
+		switch attr {
+		case "dx":
+			switchButton.Dx = utils.GetFloat(view.Values[index])
+			break
+		case "dy":
+			switchButton.Dy = utils.GetFloat(view.Values[index])
+			break
+		case "width":
+			switchButton.Width = utils.GetFloat(view.Values[index])
+			break
+		case "height":
+			switchButton.Height = utils.GetFloat(view.Values[index])
+			break
+		case "value":
+			// we can also convert negative numbers
+			s1, err1 := strconv.Atoi(view.Values[index])
+			if err1 != nil {
+				fmt.Println("Can't convert this to an int!")
+			} else {
+				switchButton.Value = s1
+			}
+			break
+		}
+		index++
+	}
+
+	switchButtons = append(switchButtons, switchButton)
+}
+
+func CircleButtonParser(view ViewParse) {
+
+	var circleButton model.CircleButton
+
+	fmt.Println("ImageParser:", view)
+	var index = 0
+	for _, attr := range view.Attributes {
+		//fmt.Println("'" + attr + "'")
+		switch attr {
+		case "dx":
+			circleButton.Dx = utils.GetFloat(view.Values[index])
+			break
+		case "dy":
+			circleButton.Dy = utils.GetFloat(view.Values[index])
+			break
+		case "width":
+			circleButton.Width = utils.GetFloat(view.Values[index])
+			break
+		case "height":
+			circleButton.Height = utils.GetFloat(view.Values[index])
+			break
+		case "icon":
+			var t = view.Values[index]
+			t = strings.Replace(t, "'", "", 2)
+			circleButton.Icon = t
+			break
+		}
+		index++
+	}
+
+	circleButtons = append(circleButtons, circleButton)
+}
+
+//------------------------------------------------------
 
 func removeFirstElement(slice []string) []string {
 	if len(slice) == 0 {
@@ -157,6 +322,9 @@ func hasElement(element string) bool {
 		return true
 	}
 	if strings.HasPrefix(element, "CircleButton") {
+		return true
+	}
+	if strings.HasPrefix(element, "SwitchButton") {
 		return true
 	}
 	return false

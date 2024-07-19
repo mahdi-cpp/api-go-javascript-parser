@@ -13,7 +13,7 @@ var (
 func Run() {
 	router.Use(CORSMiddleware())
 	getRoutes()
-	router.Run(":8096")
+	router.Run(":8095")
 }
 
 func getRoutes() {
