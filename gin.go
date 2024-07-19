@@ -3,33 +3,23 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/mahdi-cpp/api-go-movie/javascript"
+	"github.com/mahdi-cpp/api-go-javascript-parser/api"
 )
 
 var (
 	router = gin.Default()
 )
 
-// Run will Go-Instagram the server
 func Run() {
 	router.Use(CORSMiddleware())
 	getRoutes()
 	router.Run(":8096")
 }
 
-// getRoutes will create our api of our entire application
-// this way every group of api can be defined in their own file
-// so this one won't be so messy
-
 func getRoutes() {
 
 	v1 := router.Group("/v1")
-
-	javascript.AddJavascriptRoutes(v1)
-	//addGalleryRoutes(v1)
-
-	//v2 := router.Group("/v2")
-	//addStoryRoutes(v2)
+	api.AddJavascriptRoutes(v1)
 }
 
 func CORSMiddleware() gin.HandlerFunc {

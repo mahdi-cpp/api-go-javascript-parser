@@ -1,8 +1,8 @@
-package javascript
+package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mahdi-cpp/api-go-javascript-parser/javascript/repository"
+	"github.com/mahdi-cpp/api-go-javascript-parser/repository"
 )
 
 func StarScriptParse() {

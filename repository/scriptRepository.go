@@ -2,21 +2,21 @@ package repository
 
 import (
 	"fmt"
-	"github.com/mahdi-cpp/api-go-movie/javascript/models"
-	"github.com/mahdi-cpp/api-go-movie/utils"
+	"github.com/mahdi-cpp/api-go-javascript-parser/model"
+	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
 	"regexp"
 	"strings"
 	"unicode"
 )
 
-var images []models.Image
+var images []model.Image
 
-func GetImages() []models.Image {
+func GetImages() []model.Image {
 	images := ScriptParse()
 	return images
 }
 
-func ScriptParse() []models.Image {
+func ScriptParse() []model.Image {
 
 	jsFile, err := utils.ReadFile("web/FloatView.js")
 	if err != nil {
