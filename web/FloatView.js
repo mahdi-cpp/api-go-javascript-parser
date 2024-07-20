@@ -39,19 +39,28 @@ function TextView(props) {
 function SwitchButton(props) {
     return null;
 }
+function VideoPlay(url) {
+    Video.Play(url)
+};
 
 function MusicPlay(url) {
     Music.Play(url)
 };
 
-function VideoPlay(url) {
-    Video.Play(url)
-};
+
 
 const FloatView = () => (
 
     <FloatView>
         <View>
+            <CircleButton
+                icon={'icons/cxee.png'}
+                dx={440}
+                dy={1600}
+                width={200}
+                height={200}
+                onClick={() => MusicPlay("https://soundcloud.com/you/likes/song.mp3")}
+            />
             <Image
                 style={styles.image}
                 width={170}
