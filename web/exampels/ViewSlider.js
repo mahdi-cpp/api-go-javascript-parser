@@ -2,15 +2,32 @@ function MusicPlay(url) {
     Music.Play(url)
 };
 
+function SliderView(props) {
+    return null;
+}
+
 const ViewSlider = () => (
     <View>
+        <SwitchButton
+            dx={300}
+            dy={600}
+            width={180}
+            height={90}
+            round={5}
+            checked={false}
+            duration={250}
+            line={false}
+            backgroundColor={'#eceff1'}
+            activeColor={'#f44336'}
+            circleColor={'#fff'}
+        />
         <CircleButton
             icon={'icons/cxee.png'}
             dx={440}
             dy={1600}
             width={200}
             height={200}
-            onClick={() => MusicPlay("https://soundcloud.com/you/likes/song.mp3")}
+            onClick={() => Music.Play("https://soundcloud.com/you/likes/song.mp3")}
         />
         <Image
             style={styles.image}
@@ -44,7 +61,7 @@ const ViewSlider = () => (
 
         <SwitchButton
             dx={300}
-            dy={800}
+            dy={1400}
             width={180}
             height={90}
             round={5}
@@ -54,7 +71,6 @@ const ViewSlider = () => (
             backgroundColor={'#eceff1'}
             activeColor={'#f44336'}
             circleColor={'#fff'}
-
         />
 
         <SwitchButton
@@ -73,31 +89,55 @@ const ViewSlider = () => (
         <SwitchButton
             icon={'icons/nav_check.png'}
             dx={130}
-            dy={950}
+            dy={1200}
             width={400}
             height={150}
             round={5}
             checked={false}
             duration={300}
             line={true}
-            backgroundColor={'#b2ebf2'}
+            backgroundColor={'#cfd8dc'}
             activeColor={'#00bcd4'}
             circleColor={'#fff'}
         />
-            <SwitchButton
-                icon={'icons/nav_check.png'}
-                dx={730}
-                dy={1200}
-                width={250}
-                height={120}
-                round={30}
-                checked={false}
-                duration={200}
-                line={false}
-                backgroundColor={'#b0bec5'}
-                activeColor={'#000'}
-                circleColor={'#fff'}
-            />
+        <SliderView
+            dx={120}
+            dy={400}
+            width={880}
+            height={5}
+            round={50}
+            circleSize={50}
+            line={true}
+            backgroundColor={'#eee'}
+            activeColor={'#03a9f4'}
+            circleColor={'#0277bd'}
+        />
+        <SliderView
+            dx={80}
+            dy={800}
+            width={960}
+            height={90}
+            round={15}
+            circleSize={10}
+            line={true}
+            backgroundColor={'#fbe9e7'}
+            activeColor={'#ff5722'}
+            circleColor={'#ff5722'}
+        />
+        <SwitchButton
+            icon={'icons/nav_check.png'}
+            dx={730}
+            dy={1200}
+            width={250}
+            height={120}
+            round={30}
+            checked={false}
+            duration={200}
+            line={false}
+            backgroundColor={'#b0bec5'}
+            activeColor={'#000'}
+            circleColor={'#fff'}
+        />
         <Image
             style={styles.image}
             width={500}
@@ -125,8 +165,8 @@ const ViewSlider = () => (
             onClick={() => MusicPlay("http://server/api/music/v1/artists")}
         />
         <TextView style={styles.title}
-                  dx={75.8}
-                  dy={450}
+                  dx={120}
+                  dy={1830}
                   width={799.4}
                   height={200}
                   align={'CENTER'}

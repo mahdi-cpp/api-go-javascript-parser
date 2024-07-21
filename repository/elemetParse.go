@@ -14,24 +14,23 @@ func parseViewBase(viewParse ViewParse) model.ViewBase {
 	for _, attr := range viewParse.Attributes {
 		switch attr {
 		case "dx":
-			dto.Dx = utils.GetFloat(viewParse.Values[index])
+			dto.Dx = utils.ParseFloat(viewParse.Values[index])
 			break
 		case "dy":
-			dto.Dy = utils.GetFloat(viewParse.Values[index])
+			dto.Dy = utils.ParseFloat(viewParse.Values[index])
 			break
 		case "width":
-			dto.Width = utils.GetFloat(viewParse.Values[index])
+			dto.Width = utils.ParseFloat(viewParse.Values[index])
 			break
 		case "height":
-			dto.Height = utils.GetFloat(viewParse.Values[index])
+			dto.Height = utils.ParseFloat(viewParse.Values[index])
 			break
 		case "round":
-			dto.Round = utils.GetFloat(viewParse.Values[index])
+			dto.Round = utils.ParseFloat(viewParse.Values[index])
 			break
 		}
 		index++
 	}
-
 	return dto
 }
 
@@ -40,7 +39,6 @@ func parseTextBase(viewParse ViewParse) model.TextBase {
 	var index = 0
 
 	for _, attr := range viewParse.Attributes {
-
 		switch attr {
 		case "text":
 			var t = viewParse.Values[index]
@@ -51,7 +49,7 @@ func parseTextBase(viewParse ViewParse) model.TextBase {
 			dto.TextColor = utils.GetColor(viewParse.Values[index])
 			break
 		case "textSize":
-			dto.TextSize = utils.GetFloat(viewParse.Values[index])
+			dto.TextSize = utils.ParseFloat(viewParse.Values[index])
 			break
 		case "align":
 			var t = viewParse.Values[index]
@@ -163,11 +161,27 @@ func SwitchButtonParser(viewParse ViewParse) {
 }
 
 func CircleButtonParser(viewParse ViewParse) {
-
 	var dto model.CircleButton
 	dto.ViewBase = parseViewBase(viewParse)
 	dto.ThemBase = ParserThem(viewParse)
 	dto.EventBase = ParserEventBase(viewParse)
-
 	circleButtons = append(circleButtons, dto)
+}
+
+func SliderViewParser(viewParse ViewParse) {
+	var dto model.SliderView
+	dto.ViewBase = parseViewBase(viewParse)
+	dto.ThemBase = ParserThem(viewParse)
+	dto.EventBase = ParserEventBase(viewParse)
+	var index = 0
+
+	for _, attr := range viewParse.Attributes {
+		switch attr {
+		case "circleSize":
+			dto.CircleSize = utils.ParseFloat(viewParse.Values[index])
+			break
+		}
+		index++
+	}
+	sliderViews = append(sliderViews, dto)
 }

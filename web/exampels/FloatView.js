@@ -1,3 +1,5 @@
+import {SwitchButton} from "../component/SwitchButton";
+
 function FloatView(props) {
     return null;
 }
@@ -36,9 +38,6 @@ function TextView(props) {
     return null;
 }
 
-function SwitchButton(props) {
-    return null;
-}
 function VideoPlay(url) {
     Video.Play(url)
 };
@@ -53,6 +52,15 @@ const FloatView = () => (
 
     <FloatView>
         <View>
+            <SwitchButton
+                dx={900}
+                dy={200}
+                width={120}
+                height={40}
+                value={0}
+                android={}
+
+            />
             <CircleButton
                 icon={'icons/cxee.png'}
                 dx={440}
@@ -90,13 +98,7 @@ const FloatView = () => (
                       textColor={'#888'}
                       text={'09125640293'}
             />
-            <SwitchButton
-                dx={900}
-                dy={200}
-                width={120}
-                height={40}
-                value={0}
-            />
+
 
             <Image
                 style={styles.image}

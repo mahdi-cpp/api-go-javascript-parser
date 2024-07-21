@@ -11,6 +11,7 @@ var images []model.Image
 var textViews []model.TextView
 var circleButtons []model.CircleButton
 var switchButtons []model.SwitchButton
+var sliderViews []model.SliderView
 
 func GetTextViews() []model.TextView {
 	return textViews
@@ -24,14 +25,19 @@ func GetCircleButtons() []model.CircleButton {
 func GetSwitchButtons() []model.SwitchButton {
 	return switchButtons
 }
+func GetSliderView() []model.SliderView {
+	return sliderViews
+}
 
 func StartScriptParse() {
 	images = []model.Image{} //set to Empty Array
 	textViews = []model.TextView{}
 	circleButtons = []model.CircleButton{}
 	switchButtons = []model.SwitchButton{}
+	sliderViews = []model.SliderView{}
 
-	scriptParse("web/ViewSlider.js")
+	StartFunction()
+	//scriptParse("web/index.js")
 }
 
 func scriptParse(file string) {
@@ -44,7 +50,7 @@ func scriptParse(file string) {
 		fmt.Println("Ok reading file: '" + file + "'")
 	}
 
-	var search = "ViewSlider"
+	var search = "Index"
 	_, after, found := strings.Cut(jsFile, search)
 
 	if found {
@@ -133,6 +139,9 @@ func ViewElementParse(view string) {
 		break
 	case "SwitchButton":
 		SwitchButtonParser(viewParse)
+		break
+	case "SliderView":
+		SliderViewParser(viewParse)
 		break
 	}
 

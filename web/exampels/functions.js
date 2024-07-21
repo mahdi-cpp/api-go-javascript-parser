@@ -32,9 +32,6 @@ function TextView(props) {
     return null;
 }
 
-function SwitchButton(props) {
-    return null;
-}
 function VideoPlay(url) {
     Video.Play(url)
 };

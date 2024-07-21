@@ -64,7 +64,7 @@ func Parse(s string) (Color, error) {
 
 // --------------------------------------------
 
-func GetFloat(str string) float32 {
+func ParseFloat(str string) float32 {
 	value, err := strconv.ParseFloat(str, 32)
 	if err != nil {
 		// do something sensible

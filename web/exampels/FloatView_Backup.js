@@ -25,7 +25,9 @@ Music.Forward = function () {
 Music.Play = function (mp3) {
 
 };
+Music.Skip = function (mp3) {
 
+};
 
 const FloatView = () => (
 

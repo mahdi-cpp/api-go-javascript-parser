@@ -65,6 +65,9 @@ func hasElement(element string) bool {
 	if strings.HasPrefix(element, "SwitchButton") {
 		return true
 	}
+	if strings.HasPrefix(element, "SliderView") {
+		return true
+	}
 	return false
 
 }

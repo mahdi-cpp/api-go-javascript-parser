@@ -9,22 +9,22 @@ type ViewBase struct {
 }
 
 type TextBase struct {
-	Text      string  `json:"text"`
-	TextColor int     `json:"textColor"`
-	TextSize  float32 `json:"textSize"`
-	Align     string  `json:"align"`
+	Text      string  `json:"text,omitempty"`
+	TextColor int     `json:"textColor,omitempty"`
+	TextSize  float32 `json:"textSize,omitempty"`
+	Align     string  `json:"align,omitempty"`
 }
 
 type ThemBase struct {
-	Icon            string `json:"icon"`
-	Line            bool   `json:"line"`
-	BackgroundColor int    `json:"backgroundColor"`
-	ActiveColor     int    `json:"activeColor"`
-	CircleColor     int    `json:"circleColor"`
+	Icon            string `json:"icon,omitempty"`
+	Line            bool   `json:"line,omitempty"`
+	BackgroundColor int    `json:"backgroundColor,omitempty"`
+	ActiveColor     int    `json:"activeColor,omitempty"`
+	CircleColor     int    `json:"circleColor,omitempty"`
 }
 type EventBase struct {
-	OnPress string `json:"onPress"`
-	OnClick string `json:"onClick"`
+	OnPress string `json:"onPress,omitempty"`
+	OnClick string `json:"onClick,omitempty"`
 }
 
 // -----------------------------------------
@@ -50,6 +50,12 @@ type SwitchButton struct {
 	EventBase
 	Checked  bool `json:"checked"`
 	Duration int  `json:"duration"`
+}
+type SliderView struct {
+	ViewBase
+	ThemBase
+	EventBase
+	CircleSize float32 `json:"circleSize"`
 }
 
 //-----------------------------------------

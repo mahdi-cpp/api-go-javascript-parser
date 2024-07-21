@@ -17,6 +17,19 @@ func AddJavascriptRoutes(rg *gin.RouterGroup) {
 				"images":        repository.GetImages(),
 				"circleButtons": repository.GetCircleButtons(),
 				"switchButtons": repository.GetSwitchButtons(),
+				"sliderViews":   repository.GetSliderView(),
+			})
+	})
+
+	javascript.GET("/function", func(context *gin.Context) {
+		repository.StartScriptParse()
+		context.JSON(210,
+			gin.H{
+				"textViews":     repository.GetTextViews(),
+				"strings":       repository.GetImages(),
+				"circleButtons": repository.GetCircleButtons(),
+				"switchButtons": repository.GetSwitchButtons(),
+				"sliderViews":   repository.GetSliderView(),
 			})
 	})
 }
