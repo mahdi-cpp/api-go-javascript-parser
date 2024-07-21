@@ -13,6 +13,9 @@ func parseViewBase(viewParse ViewParse) model.ViewBase {
 
 	for _, attr := range viewParse.Attributes {
 		switch attr {
+		case "id":
+			dto.Id = viewParse.Values[index]
+			break
 		case "dx":
 			dto.Dx = utils.ParseFloat(viewParse.Values[index])
 			break

@@ -36,8 +36,8 @@ func StartScriptParse() {
 	switchButtons = []model.SwitchButton{}
 	sliderViews = []model.SliderView{}
 
-	StartFunction()
-	//scriptParse("web/index.js")
+	//StartFunction()
+	scriptParse("web/index.js")
 }
 
 func scriptParse(file string) {
@@ -101,7 +101,7 @@ type ViewParse struct {
 func ViewElementParse(view string) {
 
 	attributes := splitWithStartAlphabetWordExceptCurlyBraces(view)
-	//fmt.Println(view)
+	//fmt.Println(View)
 	//fmt.Println(attributes)
 
 	var viewParse ViewParse

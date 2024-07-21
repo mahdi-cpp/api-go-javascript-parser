@@ -1,6 +1,7 @@
 package model
 
 type ViewBase struct {
+	Id     string  `json:"id"`
 	Width  float32 `json:"width"`
 	Height float32 `json:"height"`
 	Dx     float32 `json:"dx"`

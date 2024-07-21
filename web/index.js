@@ -3,21 +3,44 @@ import Image, {ImageValues} from "./component/Image";
 
 function changePhoto() {
 
-    let switch1 = SwitchButtonValues
-    let switch2 = SwitchButtonValues
+    let switch1 = SwitchButtonValues;
+    let switch2 = SwitchButtonValues;
+    let avatar = ImageValues;
+    let avatar2 = ImageValues;
 
-    switch1.id = 'switch1'
-    switch1.dx = 45;
-
-    switch2.id = 'switch2'
-    switch2.dx = 500;
-
-    let imageTest = ImageValues
-    imageTest.id = 'image1'
-    imageTest.source = 'call2/ali4.jpg'
-
+    switch1.id = 'switch1';
+    switch1.dx = 645;
     switch1.checked = true;
-    switch1.line = true
+    switch1.line = true;
+    switch1.width = 400
+    switch1.height = 200;
+    switch1.round = 1;
+    switch1.activeColor = '#ff9800'
+
+    switch2.id = 'switch2';
+    switch2.width = 350;
+    switch2.height = 200
+    switch2.dx = 695;
+    switch2.dy = 550;
+    switch2.round = 100;
+    switch2.backgroundColor = '#009900';
+
+    avatar.id = 'avatar2';
+    avatar.source = 'music/face/peoples_86.jpg';
+    avatar.dx = 150;
+    avatar.dy = 200;
+    avatar.width = 500;
+    avatar.height = 500;
+    avatar.round = 3;
+
+    avatar2.id = 'avatar1';
+    avatar2.source = 'music/face/peoples_73.jpg';
+    avatar2.width = 500;
+    avatar2.height = 500;
+    avatar2.dx = 150;
+    avatar2.dy = 1350;
+    avatar2.round = 10;
+
 }
 
 function changePhoto2() {
@@ -29,14 +52,29 @@ function changePhoto2() {
 const Index = () => (
     <View>
         <SwitchButton
-            onClick={startAnimation}
+            onClick={changePhoto2}
             onPinch={}
         />
         <SwitchButton
-            id={'switch1'}
-            dx={50}
-            dy={460}
-            width={280}
+            id={'switchMain'}
+            dx={720}
+            dy={260}
+            width={300}
+            height={190}
+            round={5}
+            checked={false}
+            duration={250}
+            line={true}
+            backgroundColor={'#eceff1'}
+            activeColor={'#f44336'}
+            circleColor={'#fff'}
+            onClick={changePhoto}
+        />
+        <SwitchButton
+            id={'switch2'}
+            dx={820}
+            dy={700}
+            width={200}
             height={90}
             round={5}
             checked={false}
@@ -49,21 +87,6 @@ const Index = () => (
         />
         <SwitchButton
             id={'switch1'}
-            dx={850}
-            dy={260}
-            width={180}
-            height={90}
-            round={5}
-            checked={false}
-            duration={250}
-            line={true}
-            backgroundColor={'#eceff1'}
-            activeColor={'#f44336'}
-            circleColor={'#fff'}
-            onClick={changePhoto}
-        />
-        <SwitchButton
-            id={'switch2'}
             icon={'icons/nav_check.png'}
             dx={730}
             dy={1200}
@@ -79,9 +102,19 @@ const Index = () => (
             onClick={changePhoto2}
         />
         <Image
-            id={"image1"}
+            id={"avatar1"}
             source={'call2/ali5.jpg'}
             dx={50}
+            dy={210}
+            width={170}
+            height={170}
+            round={55}
+            onClick={changePhoto}
+        />
+        <Image
+            id={"avatar2"}
+            source={'call2/ali4.jpg'}
+            dx={250}
             dy={210}
             width={170}
             height={170}
@@ -113,10 +146,10 @@ const Index = () => (
         <SliderView
             dx={80}
             dy={800}
-            width={960}
-            height={90}
-            round={15}
-            circleSize={10}
+            width={910}
+            height={20}
+            round={50}
+            circleSize={150}
             line={true}
             backgroundColor={'#fbe9e7'}
             activeColor={'#ff5722'}
@@ -124,20 +157,11 @@ const Index = () => (
         />
         <CircleButton
             icon={'icons/cxee.png'}
-            dx={440}
+            dx={840}
             dy={1600}
             width={200}
             height={200}
             onClick={() => Music.Play("https://soundcloud.com/you/likes/song.mp3")}
-        />
-        <Image
-            style={styles.image}
-            width={500}
-            height={950}
-            dx={300}
-            dy={610}
-            round={15}
-            source={'messi/2017-07-29_00-3-42_UTC_1.jpg'}
         />
 
         <TextView style={styles.title}

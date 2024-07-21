@@ -3,13 +3,14 @@ package repository
 import (
 	"fmt"
 	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
+	"strconv"
 	"strings"
 )
 
 type View struct {
-	Id     string `json:"id"`     // id for access to object
-	Object string `json:"object"` // For example: 'Image' , 'SwitchButton' and ...
-	Param  string `json:"param"`  // properties of object
+	Id    string `json:"id"`    // id for access to object
+	View  string `json:"view"`  // For example: 'Image' , 'SwitchButton' and ...
+	Param string `json:"param"` // properties of object
 }
 
 type Function struct {
@@ -17,8 +18,14 @@ type Function struct {
 	Views    []View `json:"objects"`
 }
 
+var functions []Function
+
 func StartFunction() {
+	functions = []Function{}
 	functionParse("web/index.js")
+}
+func GetFunctions() []Function {
+	return functions
 }
 
 func functionParse(fileName string) {
@@ -88,10 +95,11 @@ func findFuncBody(body string) {
 //let switch2 = SwitchButtonValues
 //let imageTest = ImageValues
 
-type FuncViewParse struct {
-	view     string
-	variable string
+type funcViewParse struct {
+	Id       string
+	View     string
 	Param    string
+	Variable string
 }
 
 func findFuncLets(lines []string) {
@@ -99,52 +107,107 @@ func findFuncLets(lines []string) {
 	fmt.Println("---------------------------------------------------------------")
 	fmt.Println("findFuncLets")
 
-	for _, line := range lines {
-		if strings.HasPrefix(line, "let") {
-			println("'" + line + "'")
-		}
-	}
+	var views []funcViewParse
+	var funcView View
+	var funcViews []View
+	var function Function
+
+	//for _, line := range lines {
+	//	if strings.HasPrefix(line, "let") {
+	//		println("'" + line + "'")
+	//	}
+	//}
 	fmt.Println("-------------------------------")
 
 	var lets []string
 	//var variables []string
 	//var objs []string
-	var views []FuncViewParse
 
 	for _, line := range lines {
 		if strings.HasPrefix(line, "let") {
 			lets = append(lets, line)
 		}
 	}
-	fmt.Println("------------------------------------")
+
 	for _, let := range lets {
-		var view FuncViewParse
+		var view funcViewParse
 		before, after, found := strings.Cut(let, "=")
 
 		if found {
-			before = strings.Replace(before, "let", "", 4)
-			before = strings.Replace(before, " ", "", 4)
-			view.variable = before
+			before = strings.Replace(before, "let", "", 1)
+			before = strings.ReplaceAll(before, " ", "")
+			view.Variable = before
 
-			after = strings.Replace(after, "Values", "", 1)
-			after = strings.Replace(after, " ", "", 1)
-			view.view = after
+			b, _, _ := strings.Cut(after, ";")
+			b = strings.Replace(b, "Values", "", 1)
+			b = strings.ReplaceAll(b, " ", "")
+			view.View = b
 		}
 		views = append(views, view)
 	}
 
-	for _, view := range views {
-		fmt.Println(view.view)
-		fmt.Println(view.variable)
+	//for _, view := range views {
+	//	fmt.Println(view.View)
+	//}
+	//
+	//for _, line := range lines {
+	//	fmt.Println(line)
+	//}
+
+	for _, view := range views { //values
+		view.Param = "{"
 
 		for _, line := range lines {
 			if !strings.HasPrefix(line, "let") {
 
+				if strings.Contains(line, view.Variable) {
+					before, after, found := strings.Cut(line, "=")
+					if found {
+						before = strings.Replace(before, view.Variable, "", 1)
+						before = strings.Replace(before, ".", "", 1)
+						before = strings.ReplaceAll(before, " ", "")
+
+						value, _, _ := strings.Cut(after, ";")
+						value = strings.ReplaceAll(value, " ", "")
+
+						if strings.Compare(before, "id") == 0 {
+							value = strings.ReplaceAll(value, "'", "")
+							view.Id = value
+						} else if strings.Contains(before, "Color") {
+							value = strings.ReplaceAll(value, "\"", "")
+							var color = utils.GetColor(value)
+							view.Param += "\"" + before + "\":" + strconv.Itoa(color) + ","
+						} else if strings.Contains(value, "'") { // if is values string need double quotation
+							value = strings.ReplaceAll(value, "'", "")
+							view.Param += "\"" + before + "\":" + "\"" + value + "\","
+						} else {
+							view.Param += "\"" + before + "\":" + value + ","
+						}
+					}
+				}
 			}
-
 		}
+		view.Param = view.Param[:len(view.Param)-1]
+		view.Param += "}"
 
+		fmt.Println(view.Id)
+		fmt.Println(view.View)
+		fmt.Println(view.Param)
+
+		funcView.Id = view.Id
+		funcView.View = view.View
+		funcView.Param = view.Param
+
+		funcViews = append(funcViews, funcView)
+
+		fmt.Println("------------------------------")
 	}
+
+	function.FuncName = "changePhoto"
+	function.Views = funcViews
+	functions = append(functions, function)
+
+	fmt.Println(function)
 }
 
 // --------------------------------------------------------------------------
