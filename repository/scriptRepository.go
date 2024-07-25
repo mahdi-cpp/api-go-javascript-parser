@@ -36,7 +36,7 @@ func StartScriptParse() {
 	switchButtons = []model.SwitchButton{}
 	sliderViews = []model.SliderView{}
 
-	//StartFunction()
+	//TestFunction()
 	scriptParse("web/index.js")
 }
 

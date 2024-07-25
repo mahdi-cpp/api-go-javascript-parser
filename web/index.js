@@ -1,52 +1,88 @@
-import SwitchButton, {SwitchButtonValues} from "./component/SwitchButton";
-import Image, {ImageValues} from "./component/Image";
+import SwitchButton, {SwitchButtonValues} from "./SwitchButton";
+import Image, {ImageValues} from "./Image";
+
+const SwitchButtonValues: SwitchButtonValues = {};
+const ImageValues: ImageValues = {}
+
 
 function changePhoto() {
+    let switch_1 = SwitchButtonValues
+    let switch_2 = SwitchButtonValues
+    let avatar = ImageValues
+    let avatar3 = ImageValues
 
-    let switch1 = SwitchButtonValues;
-    let switch2 = SwitchButtonValues;
-    let avatar = ImageValues;
-    let avatar2 = ImageValues;
 
-    switch1.id = 'switch1';
-    switch1.dx = 645;
-    switch1.checked = true;
-    switch1.line = true;
-    switch1.width = 400
-    switch1.height = 200;
-    switch1.round = 1;
-    switch1.activeColor = '#ff9800'
+    switch_1.id = 'switch1';
+    switch_1.dx = 545;
+    switch_1.dy = 600;
+    switch_1.width = 400
+    switch_1.height = 150;
+    switch_1.round = 15;
+    switch_1.icon = 'icons/download_80_1.png'
+    switch_1.checked = true;
+    switch_1.line = true;
+    switch_1.activeColor = '#ff9800'
+    switch_1.backgroundColor = '#888';
 
-    switch2.id = 'switch2';
-    switch2.width = 350;
-    switch2.height = 200
-    switch2.dx = 695;
-    switch2.dy = 550;
-    switch2.round = 100;
-    switch2.backgroundColor = '#009900';
+    switch_2.id = 'switch2'; // Declare x, give it the value of 5
+    switch_2.icon = 'icons/cast.png'
+    switch_2.width = 400;
+    switch_2.height = 200
+    switch_2.dx = 600// Declare x, give it the value of 5
+    switch_2.dy = 1200;
+    switch_2.line = true;
+    switch_2.checked = true;
+    switch_2.round = 3;
+    switch_2.backgroundColor = '#ff9800';
 
+    avatar3.id = 'avatar1';
+    avatar3.source = 'music/face/peoples_73.jpg';
+    avatar3.width = 400;
+    avatar3.height = 400;
+
+    avatar.width = 400;
+    avatar.height = 400;
+    avatar.round = 53;
     avatar.id = 'avatar2';
     avatar.source = 'music/face/peoples_86.jpg';
-    avatar.dx = 150;
-    avatar.dy = 200;
-    avatar.width = 500;
-    avatar.height = 500;
-    avatar.round = 3;
+    avatar.dx = 50;
+    avatar.dy = 250;
 
-    avatar2.id = 'avatar1';
-    avatar2.source = 'music/face/peoples_73.jpg';
-    avatar2.width = 500;
-    avatar2.height = 500;
-    avatar2.dx = 150;
-    avatar2.dy = 1350;
-    avatar2.round = 10;
-
+    avatar3.dx = 150;
+    avatar3.dy = 1350;
+    avatar3.round = 10;
 }
 
 function changePhoto2() {
     let image1 = ImageValues
+    let image2 = ImageValues
+
     image1.id = 'image1'
-    image1.source = 'call2/ali4.jpg'
+    image2.id = 'image2'
+
+    image1.dx = 200
+    image2.dy = 300
+}
+
+function musicPlay(url, count) {
+    /*
+dsfd.id = 'switch2';
+gfgh if comment
+ali.id = 'swihghgtch2';
+*/
+    let music1 = ImageValues
+    /*
+    dsfd.id = 'switch2';
+    gfgh if comment
+    ali.id = 'swihghgtch2';
+    */
+    music1.id = 'musicPlayer'
+    music1.source = "music/track/artist1.mp4"
+    /*
+    dsfd.id = 'switch2';
+    gfgh if comment
+    ali.id = 'swihghgtch2';
+    */
 }
 
 const Index = () => (
@@ -57,10 +93,10 @@ const Index = () => (
         />
         <SwitchButton
             id={'switchMain'}
-            dx={720}
-            dy={260}
-            width={300}
-            height={190}
+            dx={630}
+            dy={300}
+            width={400}
+            height={200}
             round={5}
             checked={false}
             duration={250}
@@ -71,9 +107,9 @@ const Index = () => (
             onClick={changePhoto}
         />
         <SwitchButton
-            id={'switch2'}
-            dx={820}
-            dy={700}
+            id={'switch1'}
+            dx={720}
+            dy={600}
             width={200}
             height={90}
             round={5}
@@ -83,10 +119,9 @@ const Index = () => (
             backgroundColor={'#eceff1'}
             activeColor={'#ff9800'}
             circleColor={'#fff'}
-            onClick={changePhoto}
         />
         <SwitchButton
-            id={'switch1'}
+            id={'switch2'}
             icon={'icons/nav_check.png'}
             dx={730}
             dy={1200}
@@ -105,7 +140,7 @@ const Index = () => (
             id={"avatar1"}
             source={'call2/ali5.jpg'}
             dx={50}
-            dy={210}
+            dy={310}
             width={170}
             height={170}
             round={55}
@@ -115,7 +150,7 @@ const Index = () => (
             id={"avatar2"}
             source={'call2/ali4.jpg'}
             dx={250}
-            dy={210}
+            dy={310}
             width={170}
             height={170}
             round={55}

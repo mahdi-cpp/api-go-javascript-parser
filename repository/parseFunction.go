@@ -3,231 +3,238 @@ package repository
 import (
 	"fmt"
 	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
+	"regexp"
 	"strconv"
 	"strings"
 )
 
+type Property struct {
+	Field string
+	Value string
+}
+
 type View struct {
-	Id    string `json:"id"`    // id for access to object
-	View  string `json:"view"`  // For example: 'Image' , 'SwitchButton' and ...
-	Param string `json:"param"` // properties of object
+	Id         string
+	ViewName   string
+	Variable   string
+	Properties []Property
 }
 
 type Function struct {
-	FuncName string `json:"funcName"`
-	Views    []View `json:"objects"`
+	FuncName string
+	Lines    []string
+	Views    []View
+}
+
+type ViewDTO struct {
+	Id       string `json:"id"`       // id for access to object
+	ViewName string `json:"viewName"` // For example: 'Image' , 'SwitchButton' and ...
+	Props    string `json:"props"`    // Properties of object
+}
+
+type FunctionDTO struct {
+	FuncName string    `json:"funcName"`
+	Views    []ViewDTO `json:"views"`
 }
 
 var functions []Function
 
-func StartFunction() {
+func TestFunction() {
 	functions = []Function{}
-	functionParse("web/index.js")
-}
-func GetFunctions() []Function {
-	return functions
-}
-
-func functionParse(fileName string) {
-
-	jsFile, err := readJsonFile(fileName)
+	_, err := ParseFunctions("web/index.js")
 	if err != nil {
 		return
 	}
-
-	var search = "function"
-	_, after, found := strings.Cut(jsFile, search)
-
-	var funcName = ""
-
-	if found {
-		var insideSearch = "{"
-		before, after, hasSearch := strings.Cut(after, insideSearch)
-		if hasSearch {
-			funcName = strings.Replace(before, " ", "", 2)
-			funcName = strings.Replace(funcName, "(", "", 1)
-			funcName = strings.Replace(funcName, ")", "", 1)
-			fmt.Println("'" + funcName + "'")
-			findFuncBody(after)
-		} else {
-			fmt.Println("Not Found: " + "'" + search + "'")
-		}
-	} else {
-		fmt.Println("Not Found: " + "'" + search + "'")
-	}
 }
 
-func findFuncBody(body string) {
-	fmt.Println("-------------------------------")
-	fmt.Println("findFuncBody")
-
-	var search = "}"
-	before, _, found := strings.Cut(body, search)
-
-	if found {
-		println(before)
-	} else {
-		fmt.Println("Not Found: " + "'" + search + "'")
+func ParseFunctions(fileName string) ([]FunctionDTO, error) {
+	jsonString, err := readJsonFile(fileName)
+	if err != nil {
+		return nil, nil
 	}
 
-	lines := strings.Split(before, "\n")
-	var outputLines []string
+	jsonString = RemoveMultiLineComments(jsonString)
+	jsonString = RemoveLineComments(jsonString)
 
-	for _, line := range lines {
-		// Check if the line contains only spaces
-		if strings.TrimSpace(line) != "" {
-			line := removeLeadingSpaces(line)
-			outputLines = append(outputLines, line)
-		}
-	}
-
-	findFuncLets(outputLines)
-
-	//fmt.Println("-------------------------------")
-	//for _, str2 := range outputLines {
-	//	fmt.Println(str2)
-	//}
-
-	fmt.Println("-------------------------------")
+	FindFunctions(jsonString)
+	ParseViewsAndVariables()
+	ParseViewProperties()
+	functions := EndProcess()
+	return functions, nil
 }
 
-//let switch1 = SwitchButtonValues
-//let switch2 = SwitchButtonValues
-//let imageTest = ImageValues
+func FindFunctions(jsonString string) []Function {
+	fmt.Println("=======================================================")
+	lines := strings.Split(jsonString, "\n")
+	var index = 0
 
-type funcViewParse struct {
-	Id       string
-	View     string
-	Param    string
-	Variable string
-}
+	for i := 0; i < len(lines); i++ {
+		if len(lines) > index {
+			if strings.HasPrefix(lines[index], "function") {
+				var function Function
+				funcName, err := getStringBetween(lines[index], "function", "(")
 
-func findFuncLets(lines []string) {
-
-	fmt.Println("---------------------------------------------------------------")
-	fmt.Println("findFuncLets")
-
-	var views []funcViewParse
-	var funcView View
-	var funcViews []View
-	var function Function
-
-	//for _, line := range lines {
-	//	if strings.HasPrefix(line, "let") {
-	//		println("'" + line + "'")
-	//	}
-	//}
-	fmt.Println("-------------------------------")
-
-	var lets []string
-	//var variables []string
-	//var objs []string
-
-	for _, line := range lines {
-		if strings.HasPrefix(line, "let") {
-			lets = append(lets, line)
-		}
-	}
-
-	for _, let := range lets {
-		var view funcViewParse
-		before, after, found := strings.Cut(let, "=")
-
-		if found {
-			before = strings.Replace(before, "let", "", 1)
-			before = strings.ReplaceAll(before, " ", "")
-			view.Variable = before
-
-			b, _, _ := strings.Cut(after, ";")
-			b = strings.Replace(b, "Values", "", 1)
-			b = strings.ReplaceAll(b, " ", "")
-			view.View = b
-		}
-		views = append(views, view)
-	}
-
-	//for _, view := range views {
-	//	fmt.Println(view.View)
-	//}
-	//
-	//for _, line := range lines {
-	//	fmt.Println(line)
-	//}
-
-	for _, view := range views { //values
-		view.Param = "{"
-
-		for _, line := range lines {
-			if !strings.HasPrefix(line, "let") {
-
-				if strings.Contains(line, view.Variable) {
-					before, after, found := strings.Cut(line, "=")
-					if found {
-						before = strings.Replace(before, view.Variable, "", 1)
-						before = strings.Replace(before, ".", "", 1)
-						before = strings.ReplaceAll(before, " ", "")
-
-						value, _, _ := strings.Cut(after, ";")
-						value = strings.ReplaceAll(value, " ", "")
-
-						if strings.Compare(before, "id") == 0 {
-							value = strings.ReplaceAll(value, "'", "")
-							view.Id = value
-						} else if strings.Contains(before, "Color") {
-							value = strings.ReplaceAll(value, "\"", "")
-							var color = utils.GetColor(value)
-							view.Param += "\"" + before + "\":" + strconv.Itoa(color) + ","
-						} else if strings.Contains(value, "'") { // if is values string need double quotation
-							value = strings.ReplaceAll(value, "'", "")
-							view.Param += "\"" + before + "\":" + "\"" + value + "\","
+				if err != nil {
+					fmt.Println("FindFunctions error")
+				} else {
+					funcName = strings.ReplaceAll(funcName, " ", "")
+					function.FuncName = funcName
+					for j := index + 1; j < len(lines); j++ {
+						if strings.Contains(lines[j], "}") {
+							functions = append(functions, function)
+							break
 						} else {
-							view.Param += "\"" + before + "\":" + value + ","
+							fmt.Println(lines[j])
+							function.Lines = append(function.Lines, lines[j])
 						}
+						index++
 					}
 				}
 			}
-		}
-		view.Param = view.Param[:len(view.Param)-1]
-		view.Param += "}"
-
-		fmt.Println(view.Id)
-		fmt.Println(view.View)
-		fmt.Println(view.Param)
-
-		funcView.Id = view.Id
-		funcView.View = view.View
-		funcView.Param = view.Param
-
-		funcViews = append(funcViews, funcView)
-
-		fmt.Println("------------------------------")
-	}
-
-	function.FuncName = "changePhoto"
-	function.Views = funcViews
-	functions = append(functions, function)
-
-	fmt.Println(function)
-}
-
-// --------------------------------------------------------------------------
-
-func removeLeadingSpaces(input string) string {
-	for i, char := range input {
-		if char != ' ' {
-			return input[i:]
+			index++
 		}
 	}
-	return ""
+	return functions
 }
-func readJsonFile(file string) (string, error) {
-	jsFile, err := utils.ReadFile(file)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return "", err
-	} else {
-		fmt.Println("Ok reading file: '" + file + "'")
+
+func ParseViewsAndVariables() {
+	fmt.Println("-------------------------------")
+	fmt.Println("ParseViewsAndVariables")
+
+	// Create a regular expression pattern to match "let" as a whole word
+	pattern := `\blet\b`
+
+	//var newFunctions []Function
+
+	// Compile the regular expression pattern
+	re := regexp.MustCompile(pattern)
+	var index = 0
+	for _, function := range functions {
+		for _, line := range function.Lines {
+			if strings.HasPrefix(line, "let") {
+
+				if re.MatchString(line) {
+					var view View
+					before, after, found := strings.Cut(line, "=")
+					if found {
+						before = strings.Replace(before, "let", "", 1)
+						before = strings.ReplaceAll(before, " ", "")
+						view.Variable = before
+
+						view1, _, _ := strings.Cut(after, ";")
+						view1, _, _ = strings.Cut(view1, "//")
+						view1 = strings.Replace(view1, "Values", "", 1)
+						view1 = strings.ReplaceAll(view1, " ", "")
+
+						view.ViewName = view1
+						//fmt.Println("---->", view.ViewName, view.Variable)
+					}
+					function.Views = append(function.Views, view)
+				}
+			}
+		}
+		functions[index].Views = append(functions[index].Views, function.Views...)
+		index++
+		//functions = append(functions, function)
+	}
+	fmt.Println("==============================")
+	for _, function := range functions {
+		fmt.Println("----------------------------------")
+		fmt.Println(function.FuncName)
+		for _, view := range function.Views {
+			fmt.Println("         -->", view.ViewName, "      ", view.Variable)
+		}
+	}
+	fmt.Println("==============================")
+}
+
+func ParseViewProperties() {
+
+	fmt.Println("==============================")
+	fmt.Println("ParseViewProperties")
+
+	var index = 0
+	for _, function := range functions {
+		fmt.Println("-------------------")
+		var views []View
+		for _, view := range function.Views {
+			for _, line := range function.Lines {
+				if strings.HasPrefix(line, view.Variable+".") {
+					//fmt.Println(line)
+
+					var property Property
+
+					_, after, found := strings.Cut(line, view.Variable+".")
+					if found {
+						b, a, _ := strings.Cut(after, "=")
+
+						a, _, _ = strings.Cut(a, ";")
+						a, _, _ = strings.Cut(a, "//")
+						a = strings.ReplaceAll(a, " ", "")
+						//a = strings.ReplaceAll(a, "'", "")
+
+						b = strings.ReplaceAll(b, " ", "")
+
+						property.Field = b
+						property.Value = a
+						view.Properties = append(view.Properties, property)
+
+					} else {
+						fmt.Println("not found", view.Variable+".")
+					}
+				}
+			}
+			views = append(views, view)
+		}
+		function.Views = views
+		fmt.Println(function.Views)
+		functions[index].Views = function.Views
+		index++
 	}
 
-	return jsFile, nil
+	fmt.Println("==============================")
+}
+
+func EndProcess() []FunctionDTO {
+
+	var functionsDTO []FunctionDTO
+
+	for _, function := range functions {
+		var functionDTO FunctionDTO
+		functionDTO.FuncName = function.FuncName
+
+		for _, view := range function.Views {
+			var viewDTO ViewDTO
+			viewDTO.ViewName = view.ViewName
+			viewDTO.Props = "{"
+			for _, property := range view.Properties {
+				if strings.Compare(property.Field, "id") == 0 {
+					property.Value = strings.ReplaceAll(property.Value, "'", "")
+					viewDTO.Id = property.Value
+				} else if strings.Contains(property.Field, "Color") {
+					var color = utils.GetColor(property.Value)
+					viewDTO.Props += "\"" + property.Field + "\":" + strconv.Itoa(color) + ","
+				} else if strings.Contains(property.Value, "'") { // if is values string need double quotation
+					property.Value = strings.ReplaceAll(property.Value, "'", "")
+					viewDTO.Props += "\"" + property.Field + "\":" + "\"" + property.Value + "\","
+				} else {
+					viewDTO.Props += "\"" + property.Field + "\":" + property.Value + ","
+				}
+			}
+			viewDTO.Props = viewDTO.Props[:len(viewDTO.Props)-1]
+			viewDTO.Props += "}"
+			functionDTO.Views = append(functionDTO.Views, viewDTO)
+		}
+
+		functionsDTO = append(functionsDTO, functionDTO)
+	}
+
+	return functionsDTO
+}
+
+// RestFunctions -------------------------------------------
+func RestFunctions() []FunctionDTO {
+	functions = []Function{}
+	f, _ := ParseFunctions("web/index.js")
+	return f
 }

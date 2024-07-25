@@ -1,4 +1,4 @@
-import {SwitchButton} from "../component/SwitchButton";
+import {SwitchButton} from "../SwitchButton";
 
 function FloatView(props) {
     return null;

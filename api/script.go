@@ -12,7 +12,7 @@ func AddJavascriptRoutes(rg *gin.RouterGroup) {
 	javascript.GET("/feed", func(context *gin.Context) {
 
 		repository.StartScriptParse()
-		repository.StartFunction()
+		repository.TestFunction()
 
 		context.JSON(210,
 			gin.H{
@@ -21,7 +21,7 @@ func AddJavascriptRoutes(rg *gin.RouterGroup) {
 				"circleButtons": repository.GetCircleButtons(),
 				"switchButtons": repository.GetSwitchButtons(),
 				"sliderViews":   repository.GetSliderView(),
-				"functions":     repository.GetFunctions(),
+				"functions":     repository.RestFunctions(),
 			})
 	})
 
