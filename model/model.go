@@ -1,12 +1,15 @@
 package model
 
 type ViewBase struct {
-	Id     string  `json:"id"`
-	Width  float32 `json:"width"`
-	Height float32 `json:"height"`
-	Dx     float32 `json:"dx"`
-	Dy     float32 `json:"dy"`
-	Round  float32 `json:"round"`
+	Id      string  `json:"id"`
+	Width   float32 `json:"width"`
+	Height  float32 `json:"height"`
+	Dx      float32 `json:"dx"`
+	Dy      float32 `json:"dy"`
+	Round   float32 `json:"round"`
+	Padding float32 `json:"padding,omitempty"`
+	Margin  float32 `json:"margin,omitempty"`
+	Icon    string  `json:"icon,omitempty"`
 }
 
 type TextBase struct {
@@ -17,11 +20,10 @@ type TextBase struct {
 }
 
 type ThemBase struct {
-	Icon            string `json:"icon,omitempty"`
-	Line            bool   `json:"line,omitempty"`
-	BackgroundColor int    `json:"backgroundColor,omitempty"`
-	ActiveColor     int    `json:"activeColor,omitempty"`
-	CircleColor     int    `json:"circleColor,omitempty"`
+	Line            bool `json:"line,omitempty"`
+	BackgroundColor int  `json:"backgroundColor,omitempty"`
+	ActiveColor     int  `json:"activeColor,omitempty"`
+	CircleColor     int  `json:"circleColor,omitempty"`
 }
 type EventBase struct {
 	OnPress string `json:"onPress,omitempty"`
@@ -33,6 +35,11 @@ type EventBase struct {
 type TextView struct {
 	ViewBase
 	TextBase
+}
+type TextBox struct {
+	ViewBase
+	TextBase
+	BoxColor int `json:"boxColor"`
 }
 
 type Image struct {
@@ -57,6 +64,19 @@ type SliderView struct {
 	ThemBase
 	EventBase
 	CircleSize float32 `json:"circleSize"`
+}
+type ChartView struct {
+	ViewBase
+	ThemBase
+	EventBase
+	HeaderHeight float32  `json:"headerHeight"`
+	ChartHeight  float32  `json:"chartHeight"`
+	FooterHeight float32  `json:"footerHeight"`
+	Avatar       string   `json:"avatar"`
+	Title        string   `json:"title"`
+	Caption      string   `json:"caption"`
+	RowArray     []string `json:"rowArray"`
+	ColumnArray  []string `json:"columnArray"`
 }
 
 //-----------------------------------------

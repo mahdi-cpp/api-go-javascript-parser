@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
 	"regexp"
 	"strconv"
 	"strings"
@@ -127,7 +126,7 @@ func ParseViewsAndVariables() {
 						view1 = strings.ReplaceAll(view1, " ", "")
 
 						view.ViewName = view1
-						//fmt.Println("---->", view.ViewName, view.Variable)
+						//fmt.Println("---->", view.Header, view.Variable)
 					}
 					function.Views = append(function.Views, view)
 				}
@@ -212,7 +211,7 @@ func EndProcess() []FunctionDTO {
 					property.Value = strings.ReplaceAll(property.Value, "'", "")
 					viewDTO.Id = property.Value
 				} else if strings.Contains(property.Field, "Color") {
-					var color = utils.GetColor(property.Value)
+					var color = ParseColor(property.Value)
 					viewDTO.Props += "\"" + property.Field + "\":" + strconv.Itoa(color) + ","
 				} else if strings.Contains(property.Value, "'") { // if is values string need double quotation
 					property.Value = strings.ReplaceAll(property.Value, "'", "")

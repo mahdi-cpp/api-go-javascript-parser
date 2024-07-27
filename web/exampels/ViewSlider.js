@@ -2,9 +2,6 @@ function MusicPlay(url) {
     Music.Play(url)
 };
 
-function SliderView(props) {
-    return null;
-}
 
 const ViewSlider = () => (
     <View>

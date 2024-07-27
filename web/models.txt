@@ -1,0 +1,6 @@
+Text
+Image
+CircleButton
+SwitchButton
+SliderView
+ChartView

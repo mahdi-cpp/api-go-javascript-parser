@@ -1,7 +1,7 @@
 import type {ViewProps, ViewValues} from "./view";
 import {ThemValues, TouchProps} from "./view";
 
-export interface SwitchButtonProps extends ViewProps, TouchProps {
+export interface SliderViewProps extends ViewProps, TouchProps {
     icon?: string,
     checked?: boolean,
     duration?: number,
@@ -9,24 +9,18 @@ export interface SwitchButtonProps extends ViewProps, TouchProps {
     backgroundColor?: string,
     activeColor?: string,
     circleColor?: string,
-
-    onChange(): void;
-
-    play(): void;
-
-    pause(): void;
-
-    next(url: string)
+    circleSize?: string,
 }
 
-export type SwitchButtonValues = ViewValues & ThemValues & {
+export type SliderViewValues = ViewValues & ThemValues & {
     icon: string,
     checked: number;
     duration: number;
     line: number;
+    circleSize?: string,
 };
 
-export default function SwitchButton(props: SwitchButtonProps) {
+export default function SliderView(props: SliderViewProps) {
 
 }
 

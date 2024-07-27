@@ -2,8 +2,6 @@ package utils
 
 import (
 	"errors"
-	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -63,25 +61,3 @@ func Parse(s string) (Color, error) {
 }
 
 // --------------------------------------------
-
-func ParseFloat(str string) float32 {
-	value, err := strconv.ParseFloat(str, 32)
-	if err != nil {
-		// do something sensible
-	}
-	return float32(value)
-}
-
-func GetColor(strColor string) int {
-	strColor = strings.Replace(strColor, "'", "", 2)
-	color, err := Parse(strColor)
-	if err == nil {
-		var rgb = int(color.ToRGB().R)
-		rgb = (rgb << 8) + int(color.ToRGB().G)
-		rgb = (rgb << 8) + int(color.ToRGB().B)
-		return rgb
-	}
-
-	fmt.Println(err)
-	return 0
-}

@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
+	"strconv"
 	"strings"
 )
 
@@ -122,4 +123,41 @@ func (v *View) removePropertyByIndex(index int) {
 	}
 
 	v.Properties = append(v.Properties[:index], v.Properties[index+1:]...)
+}
+
+func ParseString(str string) string {
+	//str = strings.ReplaceAll(str, " ", "")
+	str = strings.ReplaceAll(str, "'", "")
+	str = strings.ReplaceAll(str, "\"", "")
+	return str
+}
+
+func ParseInteger(str string) int {
+	value, err := strconv.ParseInt(str, 10, 32)
+	if err != nil {
+		// do something sensible
+	}
+	return int(value)
+}
+
+func ParseFloat(str string) float32 {
+	value, err := strconv.ParseFloat(str, 32)
+	if err != nil {
+		// do something sensible
+	}
+	return float32(value)
+}
+
+func ParseColor(strColor string) int {
+	strColor = strings.Replace(strColor, "'", "", 2)
+	color, err := utils.Parse(strColor)
+	if err == nil {
+		var rgb = int(color.ToRGB().R)
+		rgb = (rgb << 8) + int(color.ToRGB().G)
+		rgb = (rgb << 8) + int(color.ToRGB().B)
+		return rgb
+	}
+
+	fmt.Println(err)
+	return 0
 }

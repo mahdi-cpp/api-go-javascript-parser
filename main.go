@@ -1,31 +1,45 @@
 package main
 
-import (
-	"github.com/mahdi-cpp/api-go-javascript-parser/repository"
-)
+import "github.com/mahdi-cpp/api-go-javascript-parser/repository"
 
 func main() {
-	//repository.StartScriptParse()
-	repository.TestFunction()
+
+	repository.StartArrayParse()
+	//repository.TestFunction()
+
+	repository.StartScriptParse()
+
 	Run()
 
 	//vm := goja.New()
-	//data, err := os.ReadFile("web/test5.js")
+	//data, err := os.ReadFile("web/data.js")
 	//if err != nil {
 	//	panic(err)
 	//}
-	//src := string(data)
-	//_, err = vm.RunString(src)
-	//if err != nil {
-	//	panic(err)
-	//}
-
-	//result, err := vm.RunString("new Music(\"Ali\").show();")
 	//
+	//// Execute JavaScript code that defines and returns a constant array
+	//_, err = vm.RunString(string(data))
+	//if err != nil {
+	//	fmt.Println("Error executing JavaScript:", err)
+	//	return
+	//}
+	//
+	//// Call the JavaScript function to get the constant array
+	//result, err := vm.RunString("users")
 	//if err != nil {
 	//	fmt.Println("Error calling JavaScript function:", err)
 	//	return
 	//}
-	//fmt.Println("Result of calling function: ", result.Export())
+	//
+	//// Convert the JavaScript array to a Go slice of integers
+	//jsArray := result.Export().([]interface{})
+	//goArray := make([]string, len(jsArray))
+	//for i, v := range jsArray {
+	//	goArray[i] = v.(string)
+	//}
+	//
+	//for _, a := range jsArray {
+	//	fmt.Println(a)
+	//}
 
 }

@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"bufio"
+	"fmt"
+	"os"
 	"regexp"
-	"strconv"
 	"strings"
 	"unicode"
 )
@@ -14,13 +16,13 @@ func ParseBoolean(str string) bool {
 	return false
 }
 
-func ParseInteger(str string) int {
-	i, err := strconv.Atoi(str)
-	if err != nil {
-		return 0
-	}
-	return i
-}
+//func ParseInteger(str string) int {
+//	i, err := strconv.Atoi(str)
+//	if err != nil {
+//		return 0
+//	}
+//	return i
+//}
 
 func removeFirstElement(slice []string) []string {
 	if len(slice) == 0 {
@@ -47,29 +49,45 @@ func splitWithStartAlphabetWordExceptCurlyBraces(s string) []string {
 			result = append(result, word)
 		}
 	}
-
 	return result
 }
 
-func hasElement(element string) bool {
+func hasValidModel(view string) (bool, error) {
 
-	if strings.HasPrefix(element, "Text") {
-		return true
+	// Open the file for reading
+	file, err := os.Open("web/models.txt")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return false, err
 	}
-	if strings.HasPrefix(element, "Image") {
-		return true
-	}
-	if strings.HasPrefix(element, "CircleButton") {
-		return true
-	}
-	if strings.HasPrefix(element, "SwitchButton") {
-		return true
-	}
-	if strings.HasPrefix(element, "SliderView") {
-		return true
-	}
-	return false
+	defer file.Close()
 
+	// Create a scanner to read the file line by line
+	scanner := bufio.NewScanner(file)
+
+	// Create a slice to store the lines
+	var lines []string
+
+	// Read lines from the file and store them in the slice
+	for scanner.Scan() {
+		line := scanner.Text()
+		lines = append(lines, line)
+	}
+
+	// Check for any errors during scanning
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error:", err)
+		return false, err
+	}
+
+	// Print the lines read from the file
+	for _, line := range lines {
+		if strings.Compare(line, view) == 0 {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 func splitWithStartAlphabetWordExceptQuoted(s string) []string {

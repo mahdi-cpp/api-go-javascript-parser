@@ -3,61 +3,89 @@ package repository
 import (
 	"fmt"
 	"github.com/mahdi-cpp/api-go-javascript-parser/model"
-	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
+	"regexp"
 	"strings"
 )
 
-var images []model.Image
 var textViews []model.TextView
+var textBoxes []model.TextBox
+var images []model.Image
 var circleButtons []model.CircleButton
 var switchButtons []model.SwitchButton
 var sliderViews []model.SliderView
+var chartViews []model.ChartView
 
-func GetTextViews() []model.TextView {
+func RestTextBoxes() []model.TextBox {
+	return textBoxes
+}
+func RestTextViews() []model.TextView {
 	return textViews
 }
-func GetImages() []model.Image {
+func RestImages() []model.Image {
 	return images
 }
-func GetCircleButtons() []model.CircleButton {
+func RestCircleButtons() []model.CircleButton {
 	return circleButtons
 }
-func GetSwitchButtons() []model.SwitchButton {
+func RestSwitchButtons() []model.SwitchButton {
 	return switchButtons
 }
-func GetSliderView() []model.SliderView {
+func RestSliderView() []model.SliderView {
 	return sliderViews
+}
+func RestChartViews() []model.ChartView {
+	return chartViews
 }
 
 func StartScriptParse() {
-	images = []model.Image{} //set to Empty Array
+	textBoxes = []model.TextBox{}
 	textViews = []model.TextView{}
+	images = []model.Image{} //set to Empty Array
 	circleButtons = []model.CircleButton{}
 	switchButtons = []model.SwitchButton{}
 	sliderViews = []model.SliderView{}
+	chartViews = []model.ChartView{}
 
-	//TestFunction()
-	scriptParse("web/index.js")
+	TestParseViews()
 }
 
-func scriptParse(file string) {
+type ViewParse struct {
+	ViewName string
+	Fields   []string
+	Values   []string
+}
 
-	jsFile, err := utils.ReadFile(file)
+type View2 struct {
+	Header     string
+	Properties []Property
+	Lines      []string
+}
+
+func TestParseViews() {
+	FindViews("web/index.js")
+}
+
+func FindViews(fileName string) {
+	fmt.Println("======================================")
+	fmt.Println("ParseViews")
+	jsonString, err := readJsonFile(fileName)
 	if err != nil {
-		fmt.Println("Error reading file:", err)
 		return
-	} else {
-		fmt.Println("Ok reading file: '" + file + "'")
 	}
+	jsonString = RemoveMultiLineComments(jsonString)
+	jsonString = RemoveLineComments(jsonString)
 
-	var search = "Index"
-	_, after, found := strings.Cut(jsFile, search)
+	var search = "<View>"
+	_, after, found := strings.Cut(jsonString, search)
 
+	if found {
+		fmt.Println(after)
+	}
 	if found {
 		var insideSearch = "</View>"
 		before, _, hasFloatView := strings.Cut(after, insideSearch)
 		if hasFloatView {
-			FindView(before)
+			ParseViews(before)
 		} else {
 			fmt.Println("Not Found: " + "'" + search + "'")
 		}
@@ -66,36 +94,57 @@ func scriptParse(file string) {
 	}
 }
 
-func FindView(view string) {
+func ParseViews(jsonViews string) {
 
-	fmt.Println("-------------------------------")
-	fmt.Println(view)
+	fmt.Println("============================")
+	fmt.Println("ParseViews")
 
-	var search = "<View>"
-	_, after, found := strings.Cut(view, search)
+	var views []View2
 
-	if found {
-		//var search2 = "</View>"
-		//before, _, hasView := strings.Cut(after, search2)
-		//if hasView {
-		elements := strings.Split(after, "<")
-		for _, element := range elements {
-			if hasElement(element) {
-				ViewElementParse(element)
+	re := regexp.MustCompile(`<\s*(\w+)\s*`)
+	var headers []string
+
+	// Find all sub matches in the input string
+	matches := re.FindAllStringSubmatch(jsonViews, -1)
+	for _, match := range matches {
+		if len(match) > 1 {
+			headers = append(headers, match[1])
+		}
+	}
+
+	result := splitStringWithHeaders(jsonViews, headers)
+	for _, section := range result {
+		lines := strings.Split(section, "\n")
+		var view View2
+		for _, line := range lines {
+
+			if strings.HasPrefix(line, "<") {
+				view.Header = line
+			} else if strings.HasPrefix(line, "/>") {
+				break
+			} else {
+				view.Lines = append(view.Lines, line)
 			}
 		}
-		//} else {
-		//	fmt.Println("Not Found: " + "'" + search2 + "'")
-		//}
-	} else {
-		fmt.Println("Not Found: " + "'" + search + "'")
-	}
-}
 
-type ViewParse struct {
-	ViewName   string
-	Attributes []string
-	Values     []string
+		for _, header := range headers {
+			if strings.HasPrefix(view.Header, "<"+header) {
+				views = append(views, view)
+				break
+			}
+		}
+	}
+
+	fmt.Println("============================")
+	for _, view := range views {
+		fmt.Println(view.Header)
+		for _, line := range view.Lines {
+			fmt.Println("         -->", line)
+		}
+		fmt.Println("------------------------")
+	}
+
+	fmt.Println("============================\n")
 }
 
 func ViewElementParse(view string) {
@@ -117,19 +166,26 @@ func ViewElementParse(view string) {
 				viewParse.ViewName = attribute
 			} else {
 				attribute = strings.Replace(attribute, " ", "", 2)
-				viewParse.Attributes = append(viewParse.Attributes, attribute)
+				viewParse.Fields = append(viewParse.Fields, attribute)
 			}
 		}
 		index += 1
 	}
 
+	fmt.Println("============================================")
 	fmt.Println(viewParse.ViewName)
-	//fmt.Println(viewParse.Attributes)
+	fmt.Println(viewParse.Fields)
+	fmt.Println(viewParse.Values)
+	fmt.Println("============================================")
+	//fmt.Println(viewParse.Fields)
 	//fmt.Println(viewParse.Values)
 
 	switch viewParse.ViewName {
 	case "TextView":
 		TextParser(viewParse)
+		break
+	case "TextBox":
+		TextBoxParser(viewParse)
 		break
 	case "Image":
 		ImageParser(viewParse)
@@ -143,8 +199,43 @@ func ViewElementParse(view string) {
 	case "SliderView":
 		SliderViewParser(viewParse)
 		break
+	case "ChartView":
+		ChartViewParser(viewParse)
+		break
 	}
 
 	fmt.Println("--------------------------------------------------")
 
+}
+
+func splitStringWithHeaders(input string, headers []string) []string {
+	var result []string
+
+	lines := strings.Split(input, "\n")
+
+	var currentSection strings.Builder
+	var inSection bool
+
+	for _, line := range lines {
+
+		for _, header := range headers {
+			if strings.HasPrefix(line, "<"+header) {
+				if inSection {
+					result = append(result, currentSection.String())
+					currentSection.Reset()
+				}
+				inSection = true
+			}
+		}
+
+		if inSection {
+			currentSection.WriteString(line + "\n")
+		}
+	}
+
+	if inSection {
+		result = append(result, currentSection.String())
+	}
+
+	return result
 }

@@ -1,16 +1,33 @@
-import SwitchButton, {SwitchButtonValues} from "./SwitchButton";
-import Image, {ImageValues} from "./Image";
+import SwitchButton, {SwitchButtonValues} from "./component/SwitchButton";
+import Image, {ImageValues} from "./component/Image";
+import {SliderViewValues} from "./component/SliderView";
+import ChartView from "./component/ChartView";
+import TextBox from "./component/TextBox";
 
 const SwitchButtonValues: SwitchButtonValues = {};
 const ImageValues: ImageValues = {}
+const SliderViewValues: SliderViewValues = {}
 
+// // Create an object that implements the Person interface
+// let person: ChartViewProps = {
+//     caption: "Alice",
+//     verticallyArray: [25, 30, 35]
+// };
 
 function changePhoto() {
+
     let switch_1 = SwitchButtonValues
     let switch_2 = SwitchButtonValues
     let avatar = ImageValues
     let avatar3 = ImageValues
+    let volume = SliderViewValues
 
+    volume.id = 'Volume'
+    volume.height = 50
+    volume.round = 5
+    volume.dy = 950
+    volume.activeColor = '#ff9800'
+    volume.circleColor = '#ff9800'
 
     switch_1.id = 'switch1';
     switch_1.dx = 545;
@@ -53,162 +70,108 @@ function changePhoto() {
     avatar3.round = 10;
 }
 
-function changePhoto2() {
-    let image1 = ImageValues
-    let image2 = ImageValues
+function messageSend() {
 
-    image1.id = 'image1'
-    image2.id = 'image2'
+    let avatarAbedNaseri = ImageValues
+    let avatarFarahmand = ImageValues
 
-    image1.dx = 200
-    image2.dy = 300
-}
+    avatarFarahmand.dx = 150;
+    avatarFarahmand.dy = 500;
+    avatarFarahmand.width = 300;
+    avatarFarahmand.height = 300;
+    avatarFarahmand.round = 10;
+    avatarFarahmand.id = 'avatar1';
+    avatarFarahmand.source = 'music/nf1/bb25.jpg';
 
-function musicPlay(url, count) {
-    /*
-dsfd.id = 'switch2';
-gfgh if comment
-ali.id = 'swihghgtch2';
-*/
-    let music1 = ImageValues
-    /*
-    dsfd.id = 'switch2';
-    gfgh if comment
-    ali.id = 'swihghgtch2';
-    */
-    music1.id = 'musicPlayer'
-    music1.source = "music/track/artist1.mp4"
-    /*
-    dsfd.id = 'switch2';
-    gfgh if comment
-    ali.id = 'swihghgtch2';
-    */
+    avatarAbedNaseri.dx = 550;
+    avatarAbedNaseri.dy = 500;
+    avatarAbedNaseri.width = 300;
+    avatarAbedNaseri.height = 300;
+    avatarAbedNaseri.round = 10;
+    avatarAbedNaseri.id = 'avatar2';
+    avatarAbedNaseri.source = 'music/nf1/bb21.jpg';
 }
 
 const Index = () => (
     <View>
-        <SwitchButton
-            onClick={changePhoto2}
-            onPinch={}
+        <ChartView
+            dx={10}
+            dy={900}
+            width={450}
+            padding={25}
+            margin={0}
+            round={0}
+
+            avatar={'call2/ali5.jpg'}
+            icon={'icons/health_blood_pressure.png'}
+            title={"Blood pressure"}
+
+            headerHeight={60}
+            chartHeight={250}
+            footerHeight={180}
+
+            rowArray={rowArray}
+            columnArray={columnArray}
         />
-        <SwitchButton
-            id={'switchMain'}
-            dx={630}
-            dy={300}
-            width={400}
-            height={200}
-            round={5}
-            checked={false}
-            duration={250}
-            line={true}
-            backgroundColor={'#eceff1'}
-            activeColor={'#f44336'}
-            circleColor={'#fff'}
-            onClick={changePhoto}
+
+        <TextBox
+            dx={250}
+            dy={2550}
+            width={600}
+            round={4}
+            padding={80}
+            align={'NORMAL'}
+            textSize={14}
+            textColor={'#fff'}
+            boxColor={'#88f'}
+            text={'این تصویر تلسکوپی عمیق، طیف رنگ‌ها و تقارن‌های سحابی زنبق را نشان می‌دهد که در میدان‌های اطراف گرد و غبار بین ستاره‌ای جاسازی شده‌اند.'}
         />
-        <SwitchButton
-            id={'switch1'}
-            dx={720}
-            dy={600}
-            width={200}
-            height={90}
-            round={5}
-            checked={false}
-            duration={250}
-            line={true}
-            backgroundColor={'#eceff1'}
-            activeColor={'#ff9800'}
-            circleColor={'#fff'}
-        />
-        <SwitchButton
-            id={'switch2'}
-            icon={'icons/nav_check.png'}
-            dx={730}
-            dy={1200}
-            width={250}
-            height={120}
-            round={30}
-            checked={false}
-            duration={200}
-            line={false}
-            backgroundColor={'#b0bec5'}
-            activeColor={'#000'}
-            circleColor={'#fff'}
-            onClick={changePhoto2}
+        <Image
+            source={'sabihe/sa_2.jpg'}
+            dx={180}
+            dy={110}
+            width={500}
+            height={700}
+            round={10}
         />
         <Image
             id={"avatar1"}
-            source={'call2/ali5.jpg'}
+            source={'call2/ali1.jpg'}
             dx={50}
-            dy={310}
-            width={170}
-            height={170}
+            dy={715}
+            width={100}
+            height={100}
             round={55}
-            onClick={changePhoto}
-        />
-        <Image
-            id={"avatar2"}
-            source={'call2/ali4.jpg'}
-            dx={250}
-            dy={310}
-            width={170}
-            height={170}
-            round={55}
-            onClick={changePhoto}
-        />
-        <TextView style={styles.title}
-                  dx={240}
-                  dy={280}
-                  width={500}
-                  height={200}
-                  textSize={16}
-                  textColor={'#000000'}
-                  align={'NORMAL'}
-                  text={'Farahmand Alipor'}
-        />
-        <SliderView
-            dx={80}
-            dy={1050}
-            width={960}
-            height={20}
-            round={55}
-            circleSize={10}
-            line={true}
-            backgroundColor={'#eee'}
-            activeColor={'#55f'}
-            circleColor={'#55f'}
-        />
-        <SliderView
-            dx={80}
-            dy={800}
-            width={910}
-            height={20}
-            round={50}
-            circleSize={150}
-            line={true}
-            backgroundColor={'#fbe9e7'}
-            activeColor={'#ff5722'}
-            circleColor={'#ff5722'}
         />
         <CircleButton
-            icon={'icons/cxee.png'}
-            dx={840}
-            dy={1600}
-            width={200}
-            height={200}
-            onClick={() => Music.Play("https://soundcloud.com/you/likes/song.mp3")}
+            dx={0}
+            dy={900}
+            width={1080}
+            height={1200}
         />
-
-        <TextView style={styles.title}
-                  dx={120}
-                  dy={1830}
-                  width={799.4}
-                  height={200}
-                  align={'CENTER'}
-                  textSize={17}
-                  textColor={'#444444'}
-                  text={'Mahdi Abdolmaleki'}
+        <SwitchButton
+            id={'switchMain'}
+            dx={830}
+            dy={300}
+            width={200}
+            height={100}
+            round={5}
+            checked={false}
+            duration={250}
+            line={true}
+            backgroundColor={'#eceff1'}
+            activeColor={'#00e676'}
+            circleColor={'#fff'}
+            onClick={changePhoto}
+        />
+        <CircleButton
+            dx={0}
+            dy={900}
+            width={1080}
+            height={1200}
         />
 
     </View>
+
+
 );

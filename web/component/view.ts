@@ -7,11 +7,23 @@ export interface ViewProps {
     width?: number,
     height?: number,
     round?: number,
+    padding?: number,
+    margin?: number,
+
+    icon?: string,
+
 }
 
 export interface TouchProps {
     onClick?: TouchEventHandler,
     onPinch?: TouchEventHandler,
+}
+
+export interface TextProps {
+    backgroundColor?: string,
+    textColor?: string,
+    text: string,
+    textSize?: string,
 }
 
 export type ViewValues = {
@@ -21,6 +33,7 @@ export type ViewValues = {
     width: number;
     height: number;
     round: number;
+    padding?: number,
 };
 
 export type ThemValues = {
@@ -29,6 +42,12 @@ export type ThemValues = {
     circleColor: number;
 };
 
+export type TextValues = {
+    backgroundColor?: string,
+    textColor?: string,
+    text: string,
+    textSize?: string,
+};
 
 
 
