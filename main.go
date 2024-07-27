@@ -7,7 +7,7 @@ func main() {
 	repository.StartArrayParse()
 	//repository.TestFunction()
 
-	repository.StartScriptParse()
+	repository.StartParseViews()
 
 	Run()
 

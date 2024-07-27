@@ -95,6 +95,7 @@ function messageSend() {
 const Index = () => (
     <View>
         <ChartView
+            id={'Mahdi 01236'}
             dx={10}
             dy={900}
             width={450}
@@ -108,10 +109,12 @@ const Index = () => (
 
             headerHeight={60}
             chartHeight={250}
-            footerHeight={180}
+            footerHeight={140}
 
-            rowArray={rowArray}
+            rowArray={rowArray2}
             columnArray={columnArray}
+
+            backgroundColor={'#ff9800'}
         />
 
         <TextBox
@@ -127,7 +130,7 @@ const Index = () => (
             text={'این تصویر تلسکوپی عمیق، طیف رنگ‌ها و تقارن‌های سحابی زنبق را نشان می‌دهد که در میدان‌های اطراف گرد و غبار بین ستاره‌ای جاسازی شده‌اند.'}
         />
         <Image
-            source={'sabihe/sa_2.jpg'}
+            source={'sabihe/sa_14.jpg'}
             dx={180}
             dy={110}
             width={500}

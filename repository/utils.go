@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -160,4 +162,77 @@ func ParseColor(strColor string) int {
 
 	fmt.Println(err)
 	return 0
+}
+
+//-------------------------------
+
+func extractFirstString(input string) string {
+	// Define a regular expression to match the first string inside curly braces '{}'
+	re := regexp.MustCompile(`\{([^}]+)\}`)
+
+	// Find the first submatch in the input string
+	match := re.FindStringSubmatch(input)
+
+	if len(match) > 1 {
+		return match[1]
+	}
+
+	return ""
+}
+
+func splitStringWithHeaders(input string, headers []string) []string {
+	var result []string
+	lines := strings.Split(input, "\n")
+	var currentSection strings.Builder
+	var inSection bool
+
+	for _, line := range lines {
+		for _, header := range headers {
+			if strings.HasPrefix(line, "<"+header) {
+				if inSection {
+					result = append(result, currentSection.String())
+					currentSection.Reset()
+				}
+				inSection = true
+			}
+		}
+		if inSection {
+			currentSection.WriteString(line + "\n")
+		}
+	}
+	if inSection {
+		result = append(result, currentSection.String())
+	}
+	return result
+}
+
+func prettyJsonConsole(jsonStr string) string {
+
+	jsonStr2 := `{
+		"chartViews": "{\n  \"avatar\": \"call2/ali5.jpg\",\n  \"backgroundColor\": 16750592,\n  \"chartHeight\": 250,\n  \"columnArray\": [\n    \"100\",\n    \"90\",\n    \"80\",\n    \"70\",\n    \"60\",\n    \"50\",\n    \"40\",\n    \"30\",\n    \"20\",\n    \"10\"\n  ],\n  \"dx\": 10,\n  \"dy\": 900,\n  \"footerHeight\": 86,\n  \"headerHeight\": 60,\n  \"icon\": \"icons/health_blood_pressure.png\",\n  \"id\": \"Mahdi 01236\",\n  \"margin\": 0,\n  \"padding\": 25,\n  \"round\": 0,\n  \"rowArray\": [\n    \"Mahdi\",\n    \"Ali\",\n    \"Reza\",\n    \"Sara\",\n    \"Maryam\",\n    \"Mahyar\",\n    \"Parsa\"\n  ],\n  \"title\": \"Blood pressure\",\n  \"width\": 450\n}"
+	}`
+
+	// Unmarshal the JSON string into an interface{}
+	var jsonData interface{}
+	err := json.Unmarshal([]byte(jsonStr2), &jsonData)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ""
+	}
+
+	// Marshal the interface{} back to JSON with indentation for pretty printing
+	prettyJSON, err := json.MarshalIndent(jsonData, "", "  ")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ""
+	}
+
+	// Convert the pretty-printed JSON to a string
+	prettyStr := string(prettyJSON)
+
+	// Print the pretty-printed JSON string
+	fmt.Println("Formatted JSON:")
+	fmt.Println(prettyStr)
+
+	return prettyStr
 }

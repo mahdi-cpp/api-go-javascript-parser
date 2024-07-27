@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mahdi-cpp/api-go-javascript-parser/model"
 	"github.com/mahdi-cpp/api-go-javascript-parser/repository"
 )
 
@@ -9,22 +10,22 @@ func AddJavascriptRoutes(rg *gin.RouterGroup) {
 
 	javascript := rg.Group("/script")
 
-	javascript.GET("/feed", func(context *gin.Context) {
+	javascript.GET("/test", func(context *gin.Context) {
 
-		repository.StartScriptParse()
+		repository.StartParseViews()
 		//repository.TestFunction()
 
-		context.JSON(210,
-			gin.H{
-				"functions":     repository.RestFunctions(),
-				"textBoxes":     repository.RestTextBoxes(),
-				"textViews":     repository.RestTextViews(),
-				"images":        repository.RestImages(),
-				"circleButtons": repository.RestCircleButtons(),
-				"switchButtons": repository.RestSwitchButtons(),
-				"sliderViews":   repository.RestSliderView(),
-				"chartViews":    repository.RestChartViews(),
-			})
+		context.JSON(210, model.RestAll())
+	})
+
+	javascript.GET("/feed", func(context *gin.Context) {
+
+		repository.StartParseViews()
+		//repository.TestFunction()
+
+		//context.JSON(210,
+		context.JSON(210, model.RestAll())
+
 	})
 
 }

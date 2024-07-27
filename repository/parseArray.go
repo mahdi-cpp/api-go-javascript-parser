@@ -45,3 +45,24 @@ func ParsArray(arrayName string) ([]string, error) {
 	}
 	return goArray, nil
 }
+
+func ParsArray2(arrayName string) ([]int64, error) {
+
+	result, err := vm2.RunString(arrayName)
+	if err != nil {
+		fmt.Println("Error calling JavaScript array:", err)
+		return nil, err
+	}
+
+	// Convert the JavaScript array to a Go slice of integers
+	jsArray := result.Export().([]interface{})
+	goArray := make([]int64, len(jsArray))
+	for i, v := range jsArray {
+		goArray[i] = v.(int64)
+	}
+
+	for _, a := range jsArray {
+		fmt.Println(a)
+	}
+	return goArray, nil
+}
