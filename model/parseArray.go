@@ -1,4 +1,4 @@
-package repository
+package model
 
 import (
 	"fmt"
@@ -46,7 +46,9 @@ func ParsArray(arrayName string) ([]string, error) {
 	return goArray, nil
 }
 
-func ParsArray2(arrayName string) ([]int64, error) {
+func ParseFloatArray(arrayName string) ([]int32, error) {
+
+	StartArrayParse()
 
 	result, err := vm2.RunString(arrayName)
 	if err != nil {
@@ -57,6 +59,7 @@ func ParsArray2(arrayName string) ([]int64, error) {
 	// Convert the JavaScript array to a Go slice of integers
 	jsArray := result.Export().([]interface{})
 	goArray := make([]int64, len(jsArray))
+
 	for i, v := range jsArray {
 		goArray[i] = v.(int64)
 	}
@@ -64,5 +67,12 @@ func ParsArray2(arrayName string) ([]int64, error) {
 	for _, a := range jsArray {
 		fmt.Println(a)
 	}
-	return goArray, nil
+
+	intArray := make([]int32, len(goArray))
+
+	for index, b := range goArray {
+		intArray[index] = int32(b)
+	}
+
+	return intArray, nil
 }

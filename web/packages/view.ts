@@ -22,8 +22,9 @@ export interface TouchProps {
 export interface TextProps {
     backgroundColor?: string,
     textColor?: string,
-    text: string,
+    text?: string,
     textSize?: string,
+    align?: string,
 }
 
 export type ViewValues = {
@@ -47,6 +48,7 @@ export type TextValues = {
     textColor?: string,
     text: string,
     textSize?: string,
+    align?: string,
 };
 
 

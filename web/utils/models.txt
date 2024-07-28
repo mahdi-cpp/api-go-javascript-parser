@@ -1,6 +1,7 @@
 Text
 Image
-CircleButton
+Button
 SwitchButton
 SliderView
 ChartView
+

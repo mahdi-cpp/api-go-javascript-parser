@@ -4,13 +4,6 @@ var jsonData = {
     "city": "New York"
 };
 
-var Button = {
-    "name": "Mahdi Abdolmaleki",
-    "age": 30,
-    "city": "New York",
-    "width": 100,
-    "height": 400
-};
 
 var Image ={
     "width": 100,

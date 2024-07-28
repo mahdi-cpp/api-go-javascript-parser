@@ -1,5 +1,5 @@
-import type {ViewProps, ViewValues} from "./view";
-import {ThemValues, TouchProps} from "./view";
+import type {ViewProps, ViewValues} from "../view";
+import {ThemValues, TouchProps} from "../view";
 
 export interface ChartViewProps extends ViewProps, TouchProps {
 
@@ -14,6 +14,7 @@ export interface ChartViewProps extends ViewProps, TouchProps {
     title: string
     caption?: string
 
+    dataArray: number[],
     rowArray: string[],
     columnArray: string[],
 }

@@ -358,7 +358,7 @@ var keywordTable = map[string]_keyword{
 		token:  LET,
 		strict: true,
 	},
-	/*"package": {
+	/*"packages": {
 		token:         KEYWORD,
 		futureKeyword: true,
 		strict:        true,

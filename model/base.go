@@ -2,10 +2,7 @@ package model
 
 import (
 	"github.com/gin-gonic/gin"
-	jsoniter "github.com/json-iterator/go"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type ViewBase struct {
 	Id      string  `json:"id"`
@@ -39,30 +36,40 @@ type EventBase struct {
 
 func Clear() {
 	chartViews = []ChartView{}
-	circleButton = []CircleButton{}
+	button = []Button{}
 	images = []Image{}
 	sliderViews = []SliderView{}
 	switchButtons = []SwitchButton{}
 	textBoxes = []TextBox{}
 	textViews = []TextView{}
+	textMessages = []TextMessage{}
+	textInputs = []TextInput{}
+	scrollViews = []ScrollView{}
 }
 
 func RestAll() map[string]any {
 	return gin.H{
-		//"functions":     repository.RestFunctions(),
+		"users":         users,
+		"functions":     RestFunctions(),
+		"scrollViews":   scrollViews,
 		"textBoxes":     textBoxes,
 		"textViews":     textViews,
 		"images":        images,
-		"circleButtons": circleButton,
+		"buttons":       button,
 		"switchButtons": switchButtons,
 		"sliderViews":   sliderViews,
 		"chartViews":    chartViews,
+		"textMessages":  textMessages,
+		"textInputs":    textInputs,
 	}
 }
 
 func AddView(header string, jsonString string) {
 
 	switch header {
+	case "ScrollView":
+		AddScrollView(jsonString)
+		break
 	case "TextView":
 		AddTextView(jsonString)
 		break
@@ -72,8 +79,8 @@ func AddView(header string, jsonString string) {
 	case "Image":
 		AddImage(jsonString)
 		break
-	case "CircleButton":
-		AddCircleButton(jsonString)
+	case "Button":
+		AddButton(jsonString)
 		break
 	case "SwitchButton":
 		AddSwitchButton(jsonString)
@@ -83,6 +90,12 @@ func AddView(header string, jsonString string) {
 		break
 	case "ChartView":
 		AddChartView(jsonString)
+		break
+	case "TextMessage":
+		AddTextMessage(jsonString)
+		break
+	case "TextInput":
+		AddTextInput(jsonString)
 		break
 	}
 }

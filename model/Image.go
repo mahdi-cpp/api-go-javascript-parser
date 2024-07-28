@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Image struct {
 	ViewBase
@@ -13,7 +16,7 @@ func AddImage(jsonString string) {
 	var view Image
 	err := json.Unmarshal([]byte(jsonString), &view)
 	if err != nil {
-		fmt.Println("Error unmarshalling JSON:", err)
+		fmt.Println("Error AddImage unmarshalling JSON:", err)
 	} else {
 		images = append(images, view)
 	}

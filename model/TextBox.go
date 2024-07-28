@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type TextBox struct {
 	ViewBase
@@ -14,7 +17,7 @@ func AddTextBox(jsonString string) {
 	var view TextBox
 	err := json.Unmarshal([]byte(jsonString), &view)
 	if err != nil {
-		fmt.Println("Error unmarshalling JSON:", err)
+		fmt.Println("Error TextBox unmarshalling JSON:", err)
 	} else {
 		textBoxes = append(textBoxes, view)
 	}

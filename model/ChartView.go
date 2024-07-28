@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -14,6 +15,7 @@ type ChartView struct {
 	Avatar       string   `json:"avatar"`
 	Title        string   `json:"title"`
 	Caption      string   `json:"caption"`
+	DataArray    []int32  `json:"dataArray"`
 	RowArray     []string `json:"rowArray"`
 	ColumnArray  []string `json:"columnArray"`
 }
@@ -25,7 +27,7 @@ func AddChartView(jsonString string) {
 
 	err := json.Unmarshal([]byte(jsonString), &view)
 	if err != nil {
-		fmt.Println("Error unmarshalling JSON:", err)
+		fmt.Println("Error AddChartView: unmarshalling JSON:", err)
 	} else {
 		chartViews = append(chartViews, view)
 	}

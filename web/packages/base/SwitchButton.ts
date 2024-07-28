@@ -1,5 +1,5 @@
-import type {ViewProps, ViewValues} from "./view";
-import {ThemValues, TouchProps} from "./view";
+import type {ViewProps, ViewValues} from "../view";
+import {ThemValues, TouchProps} from "../view";
 
 export interface SwitchButtonProps extends ViewProps, TouchProps {
     icon?: string,

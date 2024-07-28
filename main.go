@@ -1,13 +1,15 @@
 package main
 
-import "github.com/mahdi-cpp/api-go-javascript-parser/repository"
+import (
+	"github.com/mahdi-cpp/api-go-javascript-parser/model"
+)
 
 func main() {
 
-	repository.StartArrayParse()
+	model.StartArrayParse()
 	//repository.TestFunction()
 
-	repository.StartParseViews()
+	model.StartParseViews()
 
 	Run()
 

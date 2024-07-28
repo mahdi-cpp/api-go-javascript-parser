@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type SwitchButton struct {
 	ViewBase
@@ -14,9 +17,11 @@ var switchButtons []SwitchButton
 
 func AddSwitchButton(jsonString string) {
 	var view SwitchButton
+	fmt.Println("================")
+	fmt.Println(jsonString)
 	err := json.Unmarshal([]byte(jsonString), &view)
 	if err != nil {
-		fmt.Println("Error unmarshalling JSON:", err)
+		fmt.Println("Error SwitchButton unmarshalling JSON:", err)
 	} else {
 		switchButtons = append(switchButtons, view)
 	}

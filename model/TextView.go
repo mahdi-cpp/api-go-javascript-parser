@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type TextView struct {
 	ViewBase
@@ -13,7 +16,7 @@ func AddTextView(jsonString string) {
 	var view TextView
 	err := json.Unmarshal([]byte(jsonString), &view)
 	if err != nil {
-		fmt.Println("Error unmarshalling JSON:", err)
+		fmt.Println("Error TextView unmarshalling JSON:", err)
 	} else {
 		textViews = append(textViews, view)
 	}

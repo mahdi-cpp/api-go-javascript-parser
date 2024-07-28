@@ -98,7 +98,7 @@ type _keyword struct {
 //	implements
 //	interface
 //	let
-//	package
+//	packages
 //	private
 //	protected
 //	public

@@ -1,4 +1,4 @@
-import {TouchProps, ViewProps, ViewValues} from "./view";
+import {TouchProps, ViewProps, ViewValues} from "../view";
 
 interface ImageProps extends ViewProps, TouchProps{
     source?: string;

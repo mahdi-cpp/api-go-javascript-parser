@@ -1,5 +1,5 @@
-import type {TextProps, TextValues, ViewProps, ViewValues} from "./view";
-import {ThemValues, TouchProps} from "./view";
+import type {TextProps, TextValues, ViewProps, ViewValues} from "../view";
+import {ThemValues, TouchProps} from "../view";
 
 export interface TextBoxProps extends ViewProps, TouchProps, TextProps {
     boxColor?: string

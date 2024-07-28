@@ -1,12 +1,15 @@
-package repository
+package model
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"github.com/mahdi-cpp/api-go-javascript-parser/utils"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func RemoveLineComments(str string) string {
@@ -105,28 +108,6 @@ func getStringBetween(s, start, end string) (string, error) {
 	return s[startIndex+len(start) : startIndex+len(start)+endIndex], nil
 }
 
-func readJsonFile(file string) (string, error) {
-	jsFile, err := utils.ReadFile(file)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return "", err
-	} else {
-		fmt.Println("Ok reading file: '" + file + "'")
-	}
-
-	return jsFile, nil
-}
-
-// Method to remove an element from the Properties slice by index
-func (v *View) removePropertyByIndex(index int) {
-	if index < 0 || index >= len(v.Properties) {
-		fmt.Println("Index out of range")
-		return
-	}
-
-	v.Properties = append(v.Properties[:index], v.Properties[index+1:]...)
-}
-
 func ParseString(str string) string {
 	//str = strings.ReplaceAll(str, " ", "")
 	str = strings.ReplaceAll(str, "'", "")
@@ -150,6 +131,49 @@ func ParseFloat(str string) float32 {
 	return float32(value)
 }
 
+func prettyJsonConsole(jsonStr string) string {
+
+	jsonStr2 := `{
+		"chartViews": "{\n  \"avatar\": \"call2/ali5.jpg\",\n  \"backgroundColor\": 16750592,\n  \"chartHeight\": 250,\n  \"columnArray\": [\n    \"100\",\n    \"90\",\n    \"80\",\n    \"70\",\n    \"60\",\n    \"50\",\n    \"40\",\n    \"30\",\n    \"20\",\n    \"10\"\n  ],\n  \"dx\": 10,\n  \"dy\": 900,\n  \"footerHeight\": 86,\n  \"headerHeight\": 60,\n  \"icon\": \"icons/health_blood_pressure.png\",\n  \"id\": \"Mahdi 01236\",\n  \"margin\": 0,\n  \"padding\": 25,\n  \"round\": 0,\n  \"rowArray\": [\n    \"Mahdi\",\n    \"Ali\",\n    \"Reza\",\n    \"Sara\",\n    \"Maryam\",\n    \"Mahyar\",\n    \"Parsa\"\n  ],\n  \"title\": \"Blood pressure\",\n  \"width\": 450\n}"
+	}`
+
+	// Unmarshal the JSON string into an interface{}
+	var jsonData interface{}
+	err := json.Unmarshal([]byte(jsonStr2), &jsonData)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ""
+	}
+
+	// Marshal the interface{} back to JSON with indentation for pretty printing
+	prettyJSON, err := json.MarshalIndent(jsonData, "", "  ")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ""
+	}
+
+	// Convert the pretty-printed JSON to a string
+	prettyStr := string(prettyJSON)
+
+	// Print the pretty-printed JSON string
+	fmt.Println("Formatted JSON:")
+	fmt.Println(prettyStr)
+
+	return prettyStr
+}
+
+func readJsonFile(file string) (string, error) {
+	jsFile, err := utils.ReadFile(file)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return "", err
+	} else {
+		fmt.Println("Ok reading file: '" + file + "'")
+	}
+
+	return jsFile, nil
+}
+
 func ParseColor(strColor string) int {
 	strColor = strings.Replace(strColor, "'", "", 2)
 	color, err := utils.Parse(strColor)
@@ -163,8 +187,6 @@ func ParseColor(strColor string) int {
 	fmt.Println(err)
 	return 0
 }
-
-//-------------------------------
 
 func extractFirstString(input string) string {
 	// Define a regular expression to match the first string inside curly braces '{}'
@@ -206,33 +228,122 @@ func splitStringWithHeaders(input string, headers []string) []string {
 	return result
 }
 
-func prettyJsonConsole(jsonStr string) string {
+func removeFirstElement(slice []string) []string {
+	if len(slice) == 0 {
+		return slice
+	}
+	return slice[1:]
+}
 
-	jsonStr2 := `{
-		"chartViews": "{\n  \"avatar\": \"call2/ali5.jpg\",\n  \"backgroundColor\": 16750592,\n  \"chartHeight\": 250,\n  \"columnArray\": [\n    \"100\",\n    \"90\",\n    \"80\",\n    \"70\",\n    \"60\",\n    \"50\",\n    \"40\",\n    \"30\",\n    \"20\",\n    \"10\"\n  ],\n  \"dx\": 10,\n  \"dy\": 900,\n  \"footerHeight\": 86,\n  \"headerHeight\": 60,\n  \"icon\": \"icons/health_blood_pressure.png\",\n  \"id\": \"Mahdi 01236\",\n  \"margin\": 0,\n  \"padding\": 25,\n  \"round\": 0,\n  \"rowArray\": [\n    \"Mahdi\",\n    \"Ali\",\n    \"Reza\",\n    \"Sara\",\n    \"Maryam\",\n    \"Mahyar\",\n    \"Parsa\"\n  ],\n  \"title\": \"Blood pressure\",\n  \"width\": 450\n}"
-	}`
+func splitWithStartAlphabetWordExceptCurlyBraces(s string) []string {
+	var result []string
 
-	// Unmarshal the JSON string into an interface{}
-	var jsonData interface{}
-	err := json.Unmarshal([]byte(jsonStr2), &jsonData)
+	re := regexp.MustCompile(`{[^{}]+}|[a-zA-Z]\w+`)
+	words := re.FindAllString(s, -1)
+
+	for _, word := range words {
+		if !strings.Contains(word, "{") && !strings.Contains(word, "}") {
+			if len(word) > 0 {
+				firstChar := []rune(word)[0]
+				if unicode.IsLetter(firstChar) {
+					result = append(result, word)
+				}
+			}
+		} else {
+			result = append(result, word)
+		}
+	}
+	return result
+}
+
+func hasValidModel(view string) (bool, error) {
+
+	// Open the file for reading
+	file, err := os.Open("web/models.txt")
 	if err != nil {
 		fmt.Println("Error:", err)
-		return ""
+		return false, err
+	}
+	defer file.Close()
+
+	// Create a scanner to read the file line by line
+	scanner := bufio.NewScanner(file)
+
+	// Create a slice to store the lines
+	var lines []string
+
+	// Read lines from the file and store them in the slice
+	for scanner.Scan() {
+		line := scanner.Text()
+		lines = append(lines, line)
 	}
 
-	// Marshal the interface{} back to JSON with indentation for pretty printing
-	prettyJSON, err := json.MarshalIndent(jsonData, "", "  ")
-	if err != nil {
+	// Check for any errors during scanning
+	if err := scanner.Err(); err != nil {
 		fmt.Println("Error:", err)
-		return ""
+		return false, err
 	}
 
-	// Convert the pretty-printed JSON to a string
-	prettyStr := string(prettyJSON)
+	// Print the lines read from the file
+	for _, line := range lines {
+		if strings.Compare(line, view) == 0 {
+			return true, nil
+		}
+	}
 
-	// Print the pretty-printed JSON string
-	fmt.Println("Formatted JSON:")
-	fmt.Println(prettyStr)
+	return false, nil
+}
 
-	return prettyStr
+func splitWithStartAlphabetWordExceptQuoted(s string) []string {
+	var result []string
+
+	re := regexp.MustCompile(`"[^"]+"|\S+`)
+	words := re.FindAllString(s, -1)
+
+	for _, word := range words {
+		if !strings.Contains(word, "\"") {
+			if len(word) > 0 {
+				firstChar := []rune(word)[0]
+				if unicode.IsLetter(firstChar) {
+					result = append(result, word)
+				}
+			}
+		} else {
+			result = append(result, word)
+		}
+	}
+
+	return result
+}
+
+func splitWithStartAlphabetWord(s string) []string {
+	var result []string
+	words := strings.Fields(s)
+
+	for _, word := range words {
+		if len(word) > 0 {
+			firstChar := []rune(word)[0]
+			if unicode.IsLetter(firstChar) {
+				result = append(result, word)
+			}
+		}
+	}
+
+	return result
+}
+
+func startsWithAlphabet(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+	firstChar := []rune(s)[0]
+	return unicode.IsLetter(firstChar) && !unicode.IsSpace(firstChar)
+}
+
+func substringWithSearch(str, search string) string {
+	index := strings.Index(str, search)
+	if index == -1 {
+		return "" // Search pattern not found
+	}
+	return str[index+len(search):]
 }
