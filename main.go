@@ -10,6 +10,16 @@ func main() {
 	//repository.TestFunction()
 
 	model.StartParseViews()
+	model.GetUsers()
+	model.GetAvatars()
+	model.GetPosts()
+	model.GetMusics()
+	model.GetMovies()
+	model.GetGallery()
+	model.GetAlbums()
+	model.GetMaps()
+	model.GetPdfs()
+	model.GetQuestionVoices()
 
 	Run()
 

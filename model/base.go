@@ -35,6 +35,7 @@ type EventBase struct {
 }
 
 func Clear() {
+	scrollViews = []ScrollView{}
 	chartViews = []ChartView{}
 	button = []Button{}
 	images = []Image{}
@@ -44,23 +45,31 @@ func Clear() {
 	textViews = []TextView{}
 	textMessages = []TextMessage{}
 	textInputs = []TextInput{}
-	scrollViews = []ScrollView{}
 }
 
 func RestAll() map[string]any {
 	return gin.H{
-		"users":         users,
-		"functions":     RestFunctions(),
-		"scrollViews":   scrollViews,
-		"textBoxes":     textBoxes,
-		"textViews":     textViews,
-		"images":        images,
-		"buttons":       button,
-		"switchButtons": switchButtons,
-		"sliderViews":   sliderViews,
-		"chartViews":    chartViews,
-		"textMessages":  textMessages,
-		"textInputs":    textInputs,
+		"questionVoices": questionVoices,
+		"pdfs":           pdfs,
+		"maps":           maps,
+		"albums":         albums,
+		"gallery":        gallery,
+		"movies":         movies,
+		"musics":         musics,
+		"posts":          posts,
+		"users":          users,
+		"avatars":        avatars,
+		"functions":      RestFunctions(),
+		"scrollViews":    scrollViews,
+		"textBoxes":      textBoxes,
+		"textViews":      textViews,
+		"images":         images,
+		"buttons":        button,
+		"switchButtons":  switchButtons,
+		"sliderViews":    sliderViews,
+		"chartViews":     chartViews,
+		"textMessages":   textMessages,
+		"textInputs":     textInputs,
 	}
 }
 

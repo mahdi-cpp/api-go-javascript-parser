@@ -16,7 +16,6 @@ type View2 struct {
 
 func StartParseViews() {
 	Clear()
-	GetUsers()
 	FindViews("web/index.js")
 }
 
