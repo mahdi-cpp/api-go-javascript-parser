@@ -20,6 +20,7 @@ func getRoutes() {
 
 	v1 := router.Group("/v1")
 	api.AddJavascriptRoutes(v1)
+	api.AddPhotosRoutes(v1)
 }
 
 func CORSMiddleware() gin.HandlerFunc {

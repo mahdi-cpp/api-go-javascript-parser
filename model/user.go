@@ -1,60 +1,105 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/disintegration/imaging"
 	"log"
 	"os"
+	"strings"
 )
 
 var root = "/var/instagram"
 
-type Users struct {
-	Name   string `json:"name"`
-	Url    string `json:"url"`
-	Width  int    `json:"width"`
-	Height int    `json:"height"`
+var users []Photo
+var avatars []Photo
+var posts []Photo
+var musics []Photo
+var movies []Photo
+var notes []Photo
+var albums []Photo
+var maps []Photo
+var pdfs []Photo
+var questionVoices []Photo
+var pagerPhotos []Photo
+var instagramPhotos []Photo
+var gallery []Photo
+
+func InitChat() {
+	GetGallery()
+	GetUsers()
+	GetAvatars()
+	GetPosts()
+	GetMusics()
+	GetMovies()
+	GetNotes()
+	GetAlbums()
+	GetMaps()
+	GetPdfs()
+	GetQuestionVoices()
+	GetTestPager()
+	GetInstagram()
+	ChatInit()
 }
 
-var users []Users
-var avatars []Users
-var posts []Users
-var musics []Users
-var movies []Users
-var gallery []Users
-var albums []Users
-var maps []Users
-var pdfs []Users
-var questionVoices []Users
+func GetUsers() {
+	//users = []Photo{}
+	//var path = "/id/6/"
+	//var smallPath = "/id/6/small/"
+	//entries, err := os.ReadDir(root + path)
+	//
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//for _, e := range entries {
+	//	if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+	//		//width, height := getImageDimension(root + path + e.Name())
+	//		users = append(users, Photo{Name: "Name", TinyUrl: smallPath + e.Name(), Url: path + e.Name()})
+	//	}
+	//}
 
-func GetQuestionVoices() {
-	questionVoices = []Users{}
-	var path = "/student/"
+	var folder = "/id/girl/"
+	var file = "data.txt"
+	users = []Photo{}
+
+	// Open the file for reading
+	f, err := os.Open(root + folder + file)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer f.Close() // Ensure the file is closed when we're done
+
+	// Create a JSON decoder and decode the data into the slice
+	decoder := json.NewDecoder(f)
+	if err := decoder.Decode(&users); err != nil {
+		fmt.Println("Error decoding JSON:", err)
+		return
+	}
+
+	//for _, ali := range users {
+	//	fmt.Println(ali.FileType)
+	//}
+}
+
+func GetGallery() {
+	gallery = []Photo{}
+	var path = "/face/small/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, e := range entries {
-		questionVoices = append(questionVoices, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			gallery = append(gallery, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
-func GetPdfs() {
-	pdfs = []Users{}
-	var path = "/pdf/"
-	entries, err := os.ReadDir(root + path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, e := range entries {
-		pdfs = append(pdfs, Users{Name: "Name", Url: path + e.Name()})
-	}
-}
-
-func GetMaps() {
-	maps = []Users{}
+func GetInstagram() {
+	instagramPhotos = []Photo{}
 	var path = "/map/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -62,25 +107,87 @@ func GetMaps() {
 	}
 
 	for _, e := range entries {
-		maps = append(maps, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			instagramPhotos = append(instagramPhotos, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
-func GetAlbums() {
-	albums = []Users{}
-	var path = "/nature/01/"
+func GetTestPager() {
+	pagerPhotos = []Photo{}
+	var path = "/id/fa/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, e := range entries {
-		albums = append(albums, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			pagerPhotos = append(pagerPhotos, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
-func GetGallery() {
-	gallery = []Users{}
+func GetQuestionVoices() {
+	questionVoices = []Photo{}
+	var path = "/id/ali/"
+	entries, err := os.ReadDir(root + path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, e := range entries {
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			questionVoices = append(questionVoices, Photo{Name: "Name", Url: path + e.Name()})
+		}
+	}
+}
+
+func GetPdfs() {
+	pdfs = []Photo{}
+	var path = "/id/ali/"
+	entries, err := os.ReadDir(root + path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, e := range entries {
+		pdfs = append(pdfs, Photo{Name: "Name", Url: path + e.Name()})
+	}
+}
+
+func GetMaps() {
+	maps = []Photo{}
+	var path = "/id/me/"
+	entries, err := os.ReadDir(root + path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, e := range entries {
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			maps = append(maps, Photo{Name: "Name", Url: path + e.Name()})
+		}
+	}
+}
+
+func GetAlbums() {
+	albums = []Photo{}
+	var path = "/snap/gallery/"
+	entries, err := os.ReadDir(root + path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, e := range entries {
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			albums = append(albums, Photo{Name: "Name", Url: path + e.Name()})
+		}
+	}
+}
+
+func GetNotes() {
+	notes = []Photo{}
 	var path = "/ios/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -88,38 +195,44 @@ func GetGallery() {
 	}
 
 	for _, e := range entries {
-		gallery = append(gallery, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			notes = append(notes, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
 func GetMovies() {
-	movies = []Users{}
-	var path = "/posters/thumbnail_2/"
+	movies = []Photo{}
+	var path = "/posters/movies-select/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, e := range entries {
-		movies = append(movies, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			movies = append(movies, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
 func GetMusics() {
-	musics = []Users{}
-	var path = "/camera/"
+	musics = []Photo{}
+	var path = "/music/albums/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, e := range entries {
-		musics = append(musics, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			musics = append(musics, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
 func GetAvatars() {
-	avatars = []Users{}
+	avatars = []Photo{}
 	var path = "/person2/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -127,35 +240,25 @@ func GetAvatars() {
 	}
 
 	for _, e := range entries {
-		avatars = append(avatars, Users{Name: "Name", Url: path + e.Name()})
-	}
-}
-
-func GetUsers() {
-	users = []Users{}
-	var path = "/face/"
-	entries, err := os.ReadDir(root + path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, e := range entries {
-		//width, height := getImageDimension(root + path + e.Name())
-		users = append(users, Users{Name: "Name", Url: path + e.Name()})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			avatars = append(avatars, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
 func GetPosts() {
-	posts = []Users{}
-	var path = "/behance/03/"
+	posts = []Photo{}
+	var path = "/tinyhome/05/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, e := range entries {
-		width, height := getImageDimension(root + path + e.Name())
-		posts = append(posts, Users{Name: "Name", Url: path + e.Name(), Width: width, Height: height})
+		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
+			//width, height := getImageDimension(root + path + e.Name())
+			posts = append(posts, Photo{Name: "Name", Url: path + e.Name()})
+		}
 	}
 }
 
