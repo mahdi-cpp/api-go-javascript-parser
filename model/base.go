@@ -50,39 +50,6 @@ func RestChat() map[string]any {
 	return gin.H{"chats": chats}
 }
 
-func RestChats() map[string]any {
-	return gin.H{
-		"albums":          galleryAlbums,
-		"recentlyPhotos":  recentlyPhotos,
-		"shareAlbums":     shareAlbums,
-		"cameras":         galleryCameras,
-		"gallery":         gallery,
-		"instagramPhotos": instagramPhotos,
-		"pagerPhotos":     pagerPhotos,
-		"questionVoices":  questionVoices,
-		"pdfs":            pdfs,
-		"maps":            maps,
-		"chatAlbums":      albums,
-		"notes":           notes,
-		"movies":          movies,
-		"musics":          musics,
-		"posts":           posts,
-		"users":           users,
-		"avatars":         avatars,
-		"functions":       RestFunctions(),
-		"scrollViews":     scrollViews,
-		"textBoxes":       textBoxes,
-		"textViews":       textViews,
-		"images":          images,
-		"buttons":         button,
-		"switchButtons":   switchButtons,
-		"sliderViews":     sliderViews,
-		"chartViews":      chartViews,
-		"textMessages":    textMessages,
-		"textInputs":      textInputs,
-	}
-}
-
 func AddView(header string, jsonString string) {
 
 	switch header {

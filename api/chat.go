@@ -11,7 +11,7 @@ func AddJavascriptRoutes(rg *gin.RouterGroup) {
 
 	javascript.GET("/chat", func(context *gin.Context) {
 		model.StartParseViews()
-		context.JSON(210, model.RestChat())
+		context.JSON(210, model.RestChats())
 	})
 
 	javascript.GET("/chats", func(context *gin.Context) {
