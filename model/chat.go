@@ -12,6 +12,17 @@ import (
 
 var root = "/var/instagram"
 
+type ChatPhoto struct {
+	Id           int    `json:"id"`
+	Name         string `json:"name"`
+	Url          string `json:"url"`
+	ThumbnailUrl string `json:"thumbnailUrl"`
+	Orientation  int    `json:"orientation"`
+	Width        int    `json:"width"`
+	Height       int    `json:"height"`
+	FileType     string `json:"fileType"`
+}
+
 func RestChats() map[string]any {
 	return gin.H{
 		"camera":         camera,
@@ -59,31 +70,31 @@ type Chat struct {
 
 var chats []Chat
 
-var movies []Photo
-var series []Photo
+var movies []ChatPhoto
+var series []ChatPhoto
 
-var stories []Photo
+var stories []ChatPhoto
 var chatDaysDTO []ChatDays
 
-var avatars []Photo
-var posts []Photo
-var musics []Photo
-var notes []Photo
-var albums []Photo
-var maps []Photo
-var pdfs []Photo
-var questionVoices []Photo
-var pagerPhotos []Photo
-var instagramPhotos []Photo
+var avatars []ChatPhoto
+var posts []ChatPhoto
+var musics []ChatPhoto
+var notes []ChatPhoto
+var albums []ChatPhoto
+var maps []ChatPhoto
+var pdfs []ChatPhoto
+var questionVoices []ChatPhoto
+var pagerPhotos []ChatPhoto
+var instagramPhotos []ChatPhoto
 
-var instagramPost1 []Photo
-var instagramPost2 []Photo
-var instagramPost3 []Photo
-var camera []Photo
+var instagramPost1 []ChatPhoto
+var instagramPost2 []ChatPhoto
+var instagramPost3 []ChatPhoto
+var camera []ChatPhoto
 
 type ChatDays struct {
-	Name   string  `json:"name"`
-	Photos []Photo `json:"photos"`
+	Name   string      `json:"name"`
+	Photos []ChatPhoto `json:"photos"`
 }
 
 func InitChat() {
@@ -130,7 +141,7 @@ func GetChats() {
 func GetInstagramPost1() {
 	var folder = "/id/girl/"
 	var file = "data.txt"
-	instagramPost1 = []Photo{}
+	instagramPost1 = []ChatPhoto{}
 
 	f, err := os.Open(root + folder + file)
 	if err != nil {
@@ -148,7 +159,7 @@ func GetInstagramPost1() {
 func GetInstagramPost2() {
 	var folder = "/id/trip3/"
 	var file = "data.txt"
-	instagramPost2 = []Photo{}
+	instagramPost2 = []ChatPhoto{}
 
 	f, err := os.Open(root + folder + file)
 	if err != nil {
@@ -166,7 +177,7 @@ func GetInstagramPost2() {
 func GetInstagramPost3() {
 	var folder = "/id/go/"
 	var file = "data.txt"
-	instagramPost3 = []Photo{}
+	instagramPost3 = []ChatPhoto{}
 
 	f, err := os.Open(root + folder + file)
 	if err != nil {
@@ -185,7 +196,7 @@ func GetInstagramPost3() {
 func GetCamera() {
 	var folder = "/id/go/"
 	var file = "data.txt"
-	camera = []Photo{}
+	camera = []ChatPhoto{}
 
 	f, err := os.Open(root + folder + file)
 	if err != nil {
@@ -204,7 +215,7 @@ func GetCamera() {
 func GetStories() {
 	var folder = "/movie/casts/"
 	var file = "data.txt"
-	stories = []Photo{}
+	stories = []ChatPhoto{}
 
 	// Open the file for reading
 	f, err := os.Open(root + folder + file)
@@ -225,7 +236,7 @@ func GetStories() {
 func GetMovies() {
 	var folder = "/movie/movie/"
 	var file = "data.txt"
-	movies = []Photo{}
+	movies = []ChatPhoto{}
 
 	// Open the file for reading
 	f, err := os.Open(root + folder + file)
@@ -245,7 +256,7 @@ func GetMovies() {
 func GetSeries() {
 	var folder = "/movie/series/"
 	var file = "data.txt"
-	series = []Photo{}
+	series = []ChatPhoto{}
 
 	// Open the file for reading
 	f, err := os.Open(root + folder + file)
@@ -264,7 +275,7 @@ func GetSeries() {
 }
 
 func GetPdfs() {
-	pdfs = []Photo{}
+	pdfs = []ChatPhoto{}
 	var path = "/pdf/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -272,14 +283,14 @@ func GetPdfs() {
 	}
 
 	for _, e := range entries {
-		pdfs = append(pdfs, Photo{Name: "Name", Url: path + e.Name()})
+		pdfs = append(pdfs, ChatPhoto{Name: "Name", Url: path + e.Name()})
 	}
 }
 
 func GetDaysAlbums() {
 	var folder = "/id/girl/"
 	var file = "data.txt"
-	var photos []Photo
+	var photos []ChatPhoto
 	chatDaysDTO = []ChatDays{}
 
 	// Open the file for reading
@@ -312,7 +323,7 @@ func GetDaysAlbums() {
 }
 
 func GetTestPager() {
-	pagerPhotos = []Photo{}
+	pagerPhotos = []ChatPhoto{}
 	var path = "/id/fa/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -321,13 +332,13 @@ func GetTestPager() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			pagerPhotos = append(pagerPhotos, Photo{Name: "Name", Url: path + e.Name()})
+			pagerPhotos = append(pagerPhotos, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetQuestionVoices() {
-	questionVoices = []Photo{}
+	questionVoices = []ChatPhoto{}
 	var path = "/face2/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -336,13 +347,13 @@ func GetQuestionVoices() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			questionVoices = append(questionVoices, Photo{Name: "Name", Url: path + e.Name()})
+			questionVoices = append(questionVoices, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetMaps() {
-	maps = []Photo{}
+	maps = []ChatPhoto{}
 	var path = "/map/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -351,13 +362,13 @@ func GetMaps() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			maps = append(maps, Photo{Name: "Name", Url: path + e.Name()})
+			maps = append(maps, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetAlbums() {
-	albums = []Photo{}
+	albums = []ChatPhoto{}
 	var path = "/snap/gallery/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -366,13 +377,13 @@ func GetAlbums() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			albums = append(albums, Photo{Name: "Name", Url: path + e.Name()})
+			albums = append(albums, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetNotes() {
-	notes = []Photo{}
+	notes = []ChatPhoto{}
 	var path = "/ios/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -381,13 +392,13 @@ func GetNotes() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			notes = append(notes, Photo{Name: "Name", Url: path + e.Name()})
+			notes = append(notes, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetMusics() {
-	musics = []Photo{}
+	musics = []ChatPhoto{}
 	var path = "/music/albums/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -396,13 +407,13 @@ func GetMusics() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			musics = append(musics, Photo{Name: "Name", Url: path + e.Name()})
+			musics = append(musics, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetAvatars() {
-	avatars = []Photo{}
+	avatars = []ChatPhoto{}
 	var path = "/person2/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -411,13 +422,13 @@ func GetAvatars() {
 
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
-			avatars = append(avatars, Photo{Name: "Name", Url: path + e.Name()})
+			avatars = append(avatars, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
 
 func GetPosts() {
-	posts = []Photo{}
+	posts = []ChatPhoto{}
 	var path = "/tinyhome/05/"
 	entries, err := os.ReadDir(root + path)
 	if err != nil {
@@ -427,7 +438,7 @@ func GetPosts() {
 	for _, e := range entries {
 		if strings.HasSuffix(e.Name(), ".jpg") || strings.HasSuffix(e.Name(), ".jpeg") {
 			//width, height := getImageDimension(root + path + e.Name())
-			posts = append(posts, Photo{Name: "Name", Url: path + e.Name()})
+			posts = append(posts, ChatPhoto{Name: "Name", Url: path + e.Name()})
 		}
 	}
 }
