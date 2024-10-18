@@ -6,8 +6,8 @@ package old
 //	Values   []string
 //}
 
-//func parseViewBase(viewParse ViewParse) model.ViewBase {
-//	var dto model.ViewBase
+//func parseViewBase(viewParse ViewParse) model_parse.ViewBase {
+//	var dto model_parse.ViewBase
 //	var index = 0
 //
 //	for _, field := range viewParse.Fields {
@@ -47,8 +47,8 @@ package old
 //	return dto
 //}
 //
-//func parseTextBase(viewParse ViewParse) model.TextBase {
-//	var dto model.TextBase
+//func parseTextBase(viewParse ViewParse) model_parse.TextBase {
+//	var dto model_parse.TextBase
 //	var index = 0
 //
 //	for _, field := range viewParse.Fields {
@@ -73,8 +73,8 @@ package old
 //	return dto
 //}
 //
-//func ParserThem(viewParse ViewParse) model.ThemBase {
-//	var dto model.ThemBase
+//func ParserThem(viewParse ViewParse) model_parse.ThemBase {
+//	var dto model_parse.ThemBase
 //	var index = 0
 //
 //	for _, field := range viewParse.Fields {
@@ -99,8 +99,8 @@ package old
 //	return dto
 //}
 //
-//func ParserEventBase(viewParse ViewParse) model.EventBase {
-//	var dto model.EventBase
+//func ParserEventBase(viewParse ViewParse) model_parse.EventBase {
+//	var dto model_parse.EventBase
 //	var index = 0
 //
 //	for _, field := range viewParse.Fields {
@@ -121,14 +121,14 @@ package old
 ////-----------------------------------------
 //
 //func TextParser(viewParse ViewParse) {
-//	var dto model.TextView
+//	var dto model_parse.TextView
 //	dto.ViewBase = parseViewBase(viewParse)
 //	dto.TextBase = parseTextBase(viewParse)
 //	textViews = append(textViews, dto)
 //}
 //
 //func TextBoxParser(viewParse ViewParse) {
-//	var dto model.TextBox
+//	var dto model_parse.TextBox
 //	dto.ViewBase = parseViewBase(viewParse)
 //	dto.TextBase = parseTextBase(viewParse)
 //	var index = 0
@@ -145,7 +145,7 @@ package old
 //}
 //
 //func ImageParser(viewParse ViewParse) {
-//	var dto model.Image
+//	var dto model_parse.Image
 //	dto.ViewBase = parseViewBase(viewParse)
 //	var index = 0
 //	for _, field := range viewParse.Fields {
@@ -163,7 +163,7 @@ package old
 //}
 //
 //func SwitchButtonParser(viewParse ViewParse) {
-//	var dto model.SwitchButton
+//	var dto model_parse.SwitchButton
 //	dto.ViewBase = parseViewBase(viewParse)
 //	dto.ThemBase = ParserThem(viewParse)
 //	dto.EventBase = ParserEventBase(viewParse)
@@ -186,7 +186,7 @@ package old
 //}
 //
 //func CircleButtonParser(viewParse ViewParse) {
-//	var dto model.Button
+//	var dto model_parse.Button
 //	dto.ViewBase = parseViewBase(viewParse)
 //	dto.ThemBase = ParserThem(viewParse)
 //	dto.EventBase = ParserEventBase(viewParse)
@@ -194,7 +194,7 @@ package old
 //}
 //
 //func SliderViewParser(viewParse ViewParse) {
-//	var dto model.SliderView
+//	var dto model_parse.SliderView
 //	dto.ViewBase = parseViewBase(viewParse)
 //	dto.ThemBase = ParserThem(viewParse)
 //	dto.EventBase = ParserEventBase(viewParse)
@@ -213,7 +213,7 @@ package old
 //}
 //
 //func ChartViewParser(viewParse ViewParse) {
-//	var dto model.ChartView
+//	var dto model_parse.ChartView
 //	dto.ViewBase = parseViewBase(viewParse)
 //	dto.ThemBase = ParserThem(viewParse)
 //	dto.EventBase = ParserEventBase(viewParse)

@@ -1,4 +1,4 @@
-package model
+package model_parse
 
 import (
 	"encoding/json"

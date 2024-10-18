@@ -1,4 +1,4 @@
-package model
+package model_parse
 
 var FackNames = []string{
 	"امیر",     // Amir (Boy)

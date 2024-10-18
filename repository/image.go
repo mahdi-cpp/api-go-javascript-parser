@@ -7,15 +7,6 @@ import (
 	"sync"
 )
 
-type Photo struct {
-	Name        string `json:"name"`
-	Url         string `json:"url"`
-	Orientation int    `json:"orientation"`
-	FileType    string `json:"fileType"`
-	Width       int    `json:"width"`
-	Height      int    `json:"height"`
-}
-
 type PhotoBase struct {
 	Key         int     `json:"key" default:"-1"`
 	Name        string  `json:"name"`

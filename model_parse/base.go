@@ -1,8 +1,4 @@
-package model
-
-import (
-	"github.com/gin-gonic/gin"
-)
+package model_parse
 
 type ViewBase struct {
 	Id      string  `json:"id"`
@@ -45,9 +41,6 @@ func Clear() {
 	textViews = []TextView{}
 	textMessages = []TextMessage{}
 	textInputs = []TextInput{}
-}
-func RestChat() map[string]any {
-	return gin.H{"chats": chats}
 }
 
 func AddView(header string, jsonString string) {
