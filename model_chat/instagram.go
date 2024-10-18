@@ -6,9 +6,9 @@ import (
 )
 
 type InstagramPostDTO struct {
-	Caption         string                 `json:"name"`
-	Avatar          repository.PhotoBase   `json:"avatar"`
-	InstagramPhotos []repository.PhotoBase `json:"instagramPhotos"`
+	Caption string                 `json:"name"`
+	Avatar  repository.PhotoBase   `json:"avatar"`
+	Photos  []repository.PhotoBase `json:"photos"`
 }
 
 var instagramPostDTO1 InstagramPostDTO
@@ -49,14 +49,14 @@ func GetInstagram(folder string, avatar string) InstagramPostDTO {
 
 		var photo = repository.PhotoBase{}
 		photo = photos[index]
-		photo.ThumbSize = 270
+		photo.ThumbSize = 540
 		photo.Crop = true
-		photo.Round = int(dp(10))
+		photo.Round = 0
 		photo.Key = -1
-		//photo.PaintWidth = photoSize
-		//photo.PaintHeight = photoSize
+		photo.PaintWidth = 1000
+		photo.PaintHeight = 1000
 
-		localInstagramPostDTO.InstagramPhotos = append(localInstagramPostDTO.InstagramPhotos, photo)
+		localInstagramPostDTO.Photos = append(localInstagramPostDTO.Photos, photo)
 
 		nameIndex++
 		index++

@@ -1,4 +1,4 @@
-package modelv2
+package model_photos
 
 import (
 	"github.com/mahdi-cpp/api-go-javascript-parser/repository"

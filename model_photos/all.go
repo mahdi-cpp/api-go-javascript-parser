@@ -1,4 +1,4 @@
-package modelv2
+package model_photos
 
 import (
 	"github.com/gin-gonic/gin"
@@ -13,6 +13,7 @@ var root = "/"
 func RestPhotosV2() map[string]any {
 	return gin.H{
 		"galleryDTO":          galleryDTO,
+		"lionDTO":             lionDTO,
 		"recentlyDTO":         recentlyDTO,
 		"peopleDTO":           peopleDTO,
 		"tripDTO":             tripDTO,
@@ -25,14 +26,16 @@ func RestPhotosV2() map[string]any {
 
 func InitPhotos() {
 
-	GetGalleries("/var/cloud/bb/")
+	GetGalleries("/var/cloud/fa/")
+	GetLion("/var/cloud/lion/")
+
 	GetRecently("/var/cloud/bb/")
-	GetPeoples("/var/cloud/bb/")
-	GetTrips("/var/cloud/bb/")
+	GetPeoples("/var/instagram/id/face/")
+	GetTrips("/var/instagram/id/trip/")
 	GetPinned("/var/cloud/bb/")
 	albums = GetAlbums("/var/cloud/bb/")
-	shareAlbums = GetAlbums("/var/cloud/bb/")
-	cameraDTO = GetCameras("/var/instagram/id/cut/")
+	shareAlbums = GetAlbums("/var/instagram/id/go/")
+	cameraDTO = GetCameras("/var/instagram/id/go/")
 
 	utils.GetCities()
 	utils.GetNames()

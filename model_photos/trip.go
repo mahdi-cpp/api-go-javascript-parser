@@ -1,4 +1,4 @@
-package modelv2
+package model_photos
 
 import (
 	"github.com/mahdi-cpp/api-go-javascript-parser/repository"
@@ -43,7 +43,7 @@ func GetTrips(folder string) {
 		}
 
 		trip.Name = utils.FackNames[nameIndex]
-		trip.Photo = photos[index+1]
+		trip.Photo = photos[index]
 		trip.Photo.ThumbSize = 540
 		trip.Photo.Crop = true
 		trip.Photo.Key = -1

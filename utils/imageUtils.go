@@ -7,6 +7,7 @@ import (
 	"github.com/disintegration/imaging"
 	"image"
 	"image/draw"
+	"math"
 	"os"
 )
 
@@ -101,4 +102,11 @@ func ProcessImage(img image.Image, newWidth, newHeight int, cropRect image.Recta
 	croppedImage := imaging.Crop(resizedImage, cropRect)
 
 	return resizedImage, croppedImage
+}
+
+func Dp(value float32) float32 {
+	if value == 0 {
+		return 0
+	}
+	return float32(math.Ceil(float64(2.625 * value)))
 }
